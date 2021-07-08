@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "802139480563",
+    "firebase_url": "https://codeeduapp-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "codeeduapp",
+    "storage_bucket": "codeeduapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:802139480563:android:266c822de0d8b61c8f7286",
+        "android_client_info": {
+          "package_name": "educode.com.code_edu_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "802139480563-b2qvoi1jh0jp9fguqa8j8kh9rk406g7b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "educode.com.code_edu_app",
+            "certificate_hash": "1f824c2dde101eb0069f44a6eabe656071c6dc65"
+          }
+        },
+        {
+          "client_id": "802139480563-9tem1t71fdqnrjci0klkf63tckglb4ed.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqQz8eY0OONHEsZUwg7FDUt05Iljnsz7Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "802139480563-9tem1t71fdqnrjci0klkf63tckglb4ed.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "802139480563-q6j7rbnho24amm177gtm7cmbb2f5gbop.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "educationcode.com.codeEduApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
