@@ -1,4 +1,6 @@
+import 'package:code_edu/Screens/settings_screen/components/header_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
 class TaskCardWidget extends StatelessWidget {
   final String title;
@@ -12,6 +14,7 @@ class TaskCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Settings.getValue<bool>(HeaderPage.keyDarkMode, true);
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(
@@ -20,8 +23,12 @@ class TaskCardWidget extends StatelessWidget {
       ),
       margin: EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20)
+        color: isDarkMode ? Color(0xFF181818) : Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: isDarkMode ? Colors.white : Colors.transparent,
+          width: 1.0
+        )
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,7 +36,7 @@ class TaskCardWidget extends StatelessWidget {
           Text(
             title ?? "(Unnamed Task)",
             style: TextStyle(
-              color: Color(0xFF211551),
+              color: isDarkMode ? Colors.white : Color(0xFF211551),
               fontSize: 22,
               fontWeight: FontWeight.bold
             ),
@@ -40,7 +47,7 @@ class TaskCardWidget extends StatelessWidget {
               desc ?? "No description added",
               style: TextStyle(
                 fontSize: 16,
-                color: Color(0xFF86829D),
+                color: isDarkMode ? Colors.grey : Color(0xFF86829D),
                 height: 1.5,
               ),
             ),
@@ -48,59 +55,5 @@ class TaskCardWidget extends StatelessWidget {
         ],
       )
     );
-  }
-}
-
-class TodoWidget extends StatelessWidget {
-  final String text;
-  final bool isDone;
-
-  const TodoWidget({
-    Key key,
-    this.text,
-    @required this.isDone
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-      child: Row(
-        children: [
-          Container(
-            width: 24,
-            height: 24,
-            margin: EdgeInsets.only(right: 12),
-            decoration: BoxDecoration(
-              color: isDone ? Colors.blue : Colors.transparent,
-              borderRadius: BorderRadius.circular(6),
-              border: isDone ? null : Border.all(
-                color: Color(0xFF86829D),
-                width: 1.5
-              )
-            ),
-            child: Icon(
-              Icons.check,
-              color: Colors.white,
-            )
-          ),
-          Text(
-            text ?? "(Unnamed Todo)",
-            style: TextStyle(
-              color: isDone ? Colors.blue : Color(0xFF86829D),
-              fontSize: 16,
-              fontWeight: isDone ? FontWeight.bold : FontWeight.w500
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class NoGlowBehaviour extends ScrollBehavior {
-  @override
-  Widget buildViewportChrome (BuildContext context, Widget child, AxisDirection axisDirection) {
-    return child;
   }
 }

@@ -1,8 +1,12 @@
 import 'dart:io';
 
+import 'package:code_edu/Screens/Onboarding/components/slider_tile.dart';
 import 'package:code_edu/Screens/Welcome/welcome_screen.dart';
+import 'package:code_edu/Screens/settings_screen/components/header_page.dart';
 import 'package:code_edu/data/data_on_boarding.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Onboarding extends StatefulWidget {
   @override
@@ -36,53 +40,72 @@ class _OnboardingState extends State<Onboarding> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Settings.getValue<bool>(HeaderPage.keyDarkMode, true);
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: PageView.builder(
-          controller: pageController,
-          itemCount: slides.length,
-          onPageChanged: (value) {
-            setState(() {
-              currentIndex = value;
-            });
-          },
-          itemBuilder: (context, index) {
-            return SliderTile(
-              imageAssetPath: slides[index].getImageAssetPath(),
-              title: slides[index].getTitle(),
-              desc: slides[index].getDesc(),
-            );
-          }),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: SingleChildScrollView(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: PageView.builder(
+              controller: pageController,
+              itemCount: slides.length,
+              onPageChanged: (value) {
+                setState(() {
+                  currentIndex = value;
+                });
+              },
+              itemBuilder: (context, index) {
+                return SliderTile(
+                  imageAssetPath: slides[index].getImageAssetPath(),
+                  title: slides[index].getTitle(),
+                  desc: slides[index].getDesc(),
+                );
+              }),
+        ),
+      ),
       bottomSheet: currentIndex != slides.length - 1
           ? Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: Colors.grey,
+                  width: 1.0
+                )
+              ),
+            ),
               height: Platform.isAndroid ? 70 : 60,
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   GestureDetector(
-                      onTap: () {
-                        pageController.animateToPage(slides.length - 1,
-                            duration: Duration(milliseconds: 400),
-                            curve: Curves.linear);
-                      },
-                      child: Text("SKIP")),
+                    onTap: () {
+                      pageController.animateToPage(slides.length - 1,
+                        duration: Duration(milliseconds: 400),
+                        curve: Curves.linear
+                      );
+                    },
+                    child: Text(
+                      AppLocalizations.of(context).skip,
+                    )
+                  ),
                   Row(
                     children: <Widget>[
                       for (int i = 0; i < slides.length; i++)
-                        currentIndex == i
-                            ? pageIndexIndicator(true)
-                            : pageIndexIndicator(false),
+                        currentIndex == i ? pageIndexIndicator(true) : pageIndexIndicator(false),
                     ],
                   ),
                   GestureDetector(
                     onTap: () {
                       pageController.animateToPage(currentIndex + 1,
-                          duration: Duration(milliseconds: 400),
-                          curve: Curves.linear);
+                        duration: Duration(milliseconds: 400),
+                        curve: Curves.linear
+                      );
                     },
                     child: Text(
-                      "NEXT",
+                      AppLocalizations.of(context).next,
                       style: TextStyle(color: Colors.blue),
                     ),
                   )
@@ -93,52 +116,24 @@ class _OnboardingState extends State<Onboarding> {
               alignment: Alignment.center,
               width: MediaQuery.of(context).size.width,
               height: Platform.isAndroid ? 70 : 60,
-              color: Colors.blue,
+              color: isDarkMode ? Color(0xFF4D4D4D) : Colors.blue,
               child: GestureDetector(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => WelcomeScreen()));
+                  setState(() {
+                    Navigator.of(context).pushNamedAndRemoveUntil(WelcomeScreen.routeName, (Route<dynamic> route) => false);
+                  });
                 },
                 child: Text(
-                  "GET STARTED NOW",
+                  AppLocalizations.of(context).getStartedNow,
                   style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w600),
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                    letterSpacing: 0.8
+                  ),
                 ),
               ),
             ),
-    );
-  }
-}
-
-// ignore: must_be_immutable
-class SliderTile extends StatelessWidget {
-  String imageAssetPath, title, desc;
-  SliderTile({this.imageAssetPath, this.title, this.desc});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Colors.white,
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Image.asset(imageAssetPath),
-          SizedBox(height: 20),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: 25,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          SizedBox(height: 12),
-          Text(
-            desc,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
-          )
-        ],
-      ),
     );
   }
 }

@@ -29,7 +29,7 @@ class CategoryDetails extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: 150,
+              height: 180,
               decoration: BoxDecoration(
                 color: backgroundColor,
                 borderRadius: BorderRadius.circular(15),
@@ -38,6 +38,7 @@ class CategoryDetails extends StatelessWidget {
                 ),
                 image: DecorationImage(
                   image: NetworkImage(imageUrl),
+                  fit: BoxFit.fitWidth,
                 )
               ),
             ),
@@ -48,7 +49,7 @@ class CategoryDetails extends StatelessWidget {
                 textTitle,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 20,
+                  fontSize: 18,
                   color: Colors.blue
                 ),
               ),

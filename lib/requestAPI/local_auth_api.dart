@@ -10,6 +10,7 @@ class LocalAuthApi {
     try {
       return await _auth.canCheckBiometrics;
     } on PlatformException catch (e) {
+      print(e);
       return false;
     }
   }
@@ -18,6 +19,7 @@ class LocalAuthApi {
     try {
       return await _authFace.canCheckBiometrics;
     } on PlatformException catch (e) {
+      print(e);
       return false;
     }
   }
@@ -58,6 +60,7 @@ class LocalAuthApi {
         stickyAuth: true,
       );
     } on PlatformException catch(e) {
+      print(e);
       return false;
     }
   }

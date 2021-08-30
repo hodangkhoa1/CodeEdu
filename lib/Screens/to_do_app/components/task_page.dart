@@ -1,4 +1,4 @@
-import 'package:code_edu/Screens/to_do_app/components/widget.dart';
+import 'package:code_edu/Screens/to_do_app/components/to_do_widget.dart';
 import 'package:flutter/material.dart';
 
 class TaskPage extends StatefulWidget {
@@ -92,12 +92,7 @@ class _TaskPageState extends State<TaskPage> {
                 right: 24,
                 child: GestureDetector(
                   onTap: (){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TaskPage(),
-                      )
-                    );
+                    Navigator.pop(context);
                   },
                   child: Container(
                     width: 60,

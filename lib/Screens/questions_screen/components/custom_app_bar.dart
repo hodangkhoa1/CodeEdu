@@ -1,7 +1,8 @@
-import 'package:code_edu/Screens/home/home_screen.dart';
+import 'package:code_edu/notifier/category_notifier.dart';
 import 'package:flutter/material.dart';
 
 class BuildAppBar extends StatelessWidget implements PreferredSizeWidget{
+  final CategoryNotifier category;
 
   @override
   final Size preferredSize;
@@ -9,36 +10,22 @@ class BuildAppBar extends StatelessWidget implements PreferredSizeWidget{
   BuildAppBar({
     @required double height,
     Key key,
+    @required this.category,
   }) : preferredSize = Size.fromHeight(height), super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: Align(
-        alignment: Alignment.topLeft,
+        alignment: Alignment.center,
         child: Text(
-          "Programming C",
+          category.currentCategory.fullNameCourses,
           style: TextStyle(
             color: Colors.white,
             fontSize: 18
           ),
         ),
       ),
-      actions: [
-        // ignore: deprecated_member_use
-        FlatButton(
-          onPressed: () async {
-            await _asyncConfirmDialog(context);
-          },
-          child: Text(
-            "Cancel",
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.white
-            ),
-          )
-        )
-      ],
       flexibleSpace: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -62,33 +49,3 @@ class BuildAppBar extends StatelessWidget implements PreferredSizeWidget{
     );
   }
 }
-
-enum ConfirmAction { Cancel, Accept}  
-Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {  
-  return showDialog<ConfirmAction>(  
-    context: context,  
-    barrierDismissible: false,
-    builder: (BuildContext context) {  
-      return AlertDialog(  
-        title: Text('Exit the Quiz'),
-        content: const Text('Do you want to exit?'),  
-        actions: <Widget>[
-          // ignore: deprecated_member_use
-          FlatButton(
-            child: const Text('Cancel'),  
-            onPressed: () {  
-              Navigator.of(context).pop(ConfirmAction.Cancel);  
-            },  
-          ),  
-          // ignore: deprecated_member_use
-          FlatButton(  
-            child: const Text('OK'),  
-            onPressed: () {  
-              Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-            },  
-          )  
-        ],  
-      );  
-    },  
-  );  
-}  

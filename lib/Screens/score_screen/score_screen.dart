@@ -23,8 +23,17 @@ class ScoreScreen extends StatelessWidget {
               ),
               Spacer(),
               Text(
-                "${_questionController.correctAnswered * 10}/${_questionController.questions.length * 10}",
+                "${_questionController.numOfCorrectAns}/10",
                 style: Theme.of(context).textTheme.headline4.copyWith(color: Color(0xFF8B94BC)),
+              ),
+              Spacer(flex: 3),
+              // ignore: deprecated_member_use
+              FlatButton(
+                onPressed: (){
+                  print("Done");
+                  //Navigator.of(context).pushAndRemoveUntil(newRoute, (route) => false)
+                },
+                child: Text("Back to home")
               ),
               Spacer(flex: 3),
             ],

@@ -2,6 +2,8 @@ import 'package:code_edu/Screens/policy_terms_screen/components/body.dart';
 import 'package:flutter/material.dart';
 
 class PolicyScreen extends StatelessWidget {
+  static String routeName = "/policyScreen";
+
   const PolicyScreen({
     Key key 
   }) : super(key: key);

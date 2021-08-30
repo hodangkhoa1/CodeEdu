@@ -1,28 +1,98 @@
 import 'package:code_edu/requestAPI/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 
-class AuthBloc {
+// void loginFacebook(BuildContext context, String loginSuccessMessage, String loginCancelMessage, String loginErrorMessage) async {
+//   final authService = AuthService();
+//   final fb = FacebookLogin();
+
+//   try {
+//     final res = await fb.logIn(
+//       permissions: [
+//         FacebookPermission.publicProfile,
+//         FacebookPermission.email
+//       ]
+//     );
+
+//     switch(res.status){
+//       case FacebookLoginStatus.success:
+//         //Get Token
+//         final FacebookAccessToken fbToken = res.accessToken;
+
+//         //Convert to Auth Credential
+//         final AuthCredential credential = FacebookAuthProvider.credential(fbToken.token);
+
+//         //User Credential to Sign in with Firebase
+//         final result = await authService.signInWithCredentail(credential);
+//         if(result.user.uid.isNotEmpty) {
+//           authService.currentUser.listen((facebookUser) {
+//             if(facebookUser != null) {
+//               print(facebookUser.email);
+//               Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen(
+//                 urlImage: facebookUser.photoURL,
+//                 nameTextAppBar: facebookUser.displayName,
+//                 emailGoogleLogin: facebookUser.email,
+//               )), (Route<dynamic> route) => false);
+//               displayToastMessage(context, loginSuccessMessage);
+//             }
+//           });
+//         }
+//         break;
+//       case FacebookLoginStatus.cancel:
+//         displayToastMessage(context, loginCancelMessage);
+//         break;
+//       case FacebookLoginStatus.error:
+//         displayToastMessage(context, loginErrorMessage);
+//         break;
+//     }
+//   } catch (e) {
+//     print(e);
+//   }
+// }
+
+class AuthBlocFacebook {
   final authService = AuthService();
-  final facebook = FacebookLogin();
+  final fb = FacebookLogin();
 
-  Stream<FirebaseUser> get currentUser => authService.currentUser;
+  Stream<User> get currentUser => authService.currentUser;
 
   loginFacebook() async {
-    print("Thành công");
+    print('Starting Facebook Login');
 
-    final result = await facebook.logIn(["email", "public_profile", "user_friends"]);
-    print(result.errorMessage);
-    switch (result.status) {
-      case FacebookLoginStatus.cancelledByUser:
-        print("The user cancel the login");
-        break;
+    final res = await fb.logIn(
+      permissions: [
+        FacebookPermission.publicProfile,
+        FacebookPermission.email
+      ]
+    );
+
+    switch(res.status){
+      case FacebookLoginStatus.success:
+      print('It worked');
+
+      //Get Token
+      final FacebookAccessToken fbToken = res.accessToken;
+
+      //Convert to Auth Credential
+      final AuthCredential credential 
+        = FacebookAuthProvider.credential(fbToken.token);
+
+      //User Credential to Sign in with Firebase
+      final result = await authService.signInWithCredentail(credential);
+
+      print('${result.user.displayName} is now logged in');
+
+      break;
+      case FacebookLoginStatus.cancel:
+      print('The user canceled the login');
+      break;
       case FacebookLoginStatus.error:
-        print("There was an error");
-        break;
-      case FacebookLoginStatus.loggedIn:
-        print("Thành công login");
-        break;
+      print('There was an error');
+      break;
     }
+  }
+
+  logout(){
+    authService.logout();
   }
 }

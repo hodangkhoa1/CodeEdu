@@ -8,7 +8,7 @@ class RoundeButton extends StatelessWidget {
     Key key,
     this.text,
     this.press,
-    this.color = Colors.blue,
+    this.color,
     this.textColor = Colors.white,
   }) : super(key: key);
 

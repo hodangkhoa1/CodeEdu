@@ -1,7 +1,10 @@
-import 'dart:async';
-
 import 'package:code_edu/Screens/Onboarding/on_boarding_screen.dart';
+import 'package:code_edu/Screens/Welcome/welcome_screen.dart';
+import 'package:code_edu/blocs/auth_bloc_facebook.dart';
+import 'package:code_edu/blocs/auth_bloc_google.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:splash_screen_view/SplashScreenView.dart';
 
 class Body extends StatefulWidget {
   @override
@@ -10,73 +13,25 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   @override
-  void initState() {
-    super.initState();
-    Timer(Duration(seconds: 5), ()=> Navigator.push(
-      context, MaterialPageRoute(builder: (context) => Onboarding()))
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.blueAccent,
-            ),
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                flex: 2,
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      CircleAvatar(
-                        backgroundColor: Colors.white,
-                        radius: 50.0,
-                        child: Image.asset(
-                          "assets/images/icon-app.png",
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 10.0),
-                      ),
-                      Text(
-                        "Code Edu",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 28.0,
-                          fontWeight: FontWeight.bold
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    CircularProgressIndicator(
-                      backgroundColor: Colors.white,
-                    ),
-                    // CircularProgressIndicator(),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          )
+      body: SplashScreenView(
+        navigateRoute: (FirebaseAuth.instance.currentUser == null || AuthGoogleBloc().currentUser == null || AuthBlocFacebook().currentUser == null) ? Onboarding() : WelcomeScreen(),
+        duration: 5000,
+        imageSize: 130,
+        imageSrc: "assets/images/icon-app.png",
+        text: "Code Edu",
+        textType: TextType.ColorizeAnimationText,
+        textStyle: TextStyle(
+          fontSize: 40
+        ),
+        colors: [
+          Colors.purple,
+          Colors.blue,
+          Colors.yellow,
+          Colors.red,
         ],
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       ),
     );
   }

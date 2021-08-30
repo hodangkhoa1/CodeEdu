@@ -1,7 +1,10 @@
+import 'package:code_edu/Screens/settings_screen/components/header_page.dart';
+import 'package:code_edu/Screens/to_do_app/components/no_glow_behaviour.dart';
 import 'package:code_edu/Screens/to_do_app/components/widget.dart';
 import 'package:code_edu/Screens/to_do_app/components/task_page.dart';
 import 'package:code_edu/components/rounded_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
 class Body extends StatefulWidget {
   const Body({
@@ -21,6 +24,7 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Settings.getValue<bool>(HeaderPage.keyDarkMode, true);
     return Container(
       child: Container(
         width: double.infinity,
@@ -28,7 +32,7 @@ class _BodyState extends State<Body> {
           horizontal: 24,
           vertical: 32
         ),
-        color: Color(0xFFF6F6F6),
+        color: isDarkMode ? Color(0xFF181818) : Color(0xFFF6F6F6),
         child: Stack(
           children: [
             Column(
@@ -95,6 +99,8 @@ class _BodyState extends State<Body> {
   }
 
   void showBottomPopup(BuildContext context) async{
+    final isDarkMode = Settings.getValue<bool>(HeaderPage.keyDarkMode, true);
+
     showGeneralDialog(
       barrierLabel: "Todoo",
       barrierDismissible: true,
@@ -112,7 +118,7 @@ class _BodyState extends State<Body> {
               right: 12,
             ),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: isDarkMode ? Color(0xFF202020) : Colors.white,
               borderRadius: BorderRadius.circular(40)
             ),
             child: Center(
@@ -139,7 +145,7 @@ class _BodyState extends State<Body> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(top: 20),
+                    padding: EdgeInsets.only(top: 18),
                     child: Text(
                       "What todoo, is a app to list your \ntask and to check when finished.",
                       textAlign: TextAlign.center,
@@ -147,14 +153,17 @@ class _BodyState extends State<Body> {
                         color: Colors.grey[400],
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
-                        decoration: TextDecoration.none
+                        decoration: TextDecoration.none,
+                        height: 1.4
                       ),
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                     child: RoundeButton(
+                      color: isDarkMode ? Color(0xFF313131) : Colors.blue,
                       text: "Get Started",
+                      textColor: isDarkMode ? Colors.grey[400] : Colors.white,
                       press: () => Navigator.of(context).pop(),
                     ),
                   )

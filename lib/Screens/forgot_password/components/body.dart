@@ -1,9 +1,11 @@
-import 'package:code_edu/Screens/Login/components/body.dart';
 import 'package:code_edu/Screens/Signup/signup_screen.dart';
+import 'package:code_edu/Screens/settings_screen/components/header_page.dart';
 import 'package:code_edu/components/already_have_an_account_check.dart';
+import 'package:code_edu/components/form_error.dart';
 import 'package:code_edu/components/rounded_button.dart';
 import 'package:code_edu/validators/reg_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Body extends StatefulWidget {
@@ -19,6 +21,8 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final isDarkMode = Settings.getValue<bool>(HeaderPage.keyDarkMode, true);
+    
     return Form(
       key: _formKey,
       child: SizedBox(
@@ -33,9 +37,10 @@ class _BodyState extends State<Body> {
                 Text(
                   "Forgot Password",
                   style: TextStyle(
-                      fontSize: 28,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w400),
+                    fontSize: 28,
+                    color: Colors.blue,
+                    fontWeight: FontWeight.w400
+                  ),
                 ),
                 SizedBox(height: size.height * 0.01),
                 Text(
@@ -103,6 +108,7 @@ class _BodyState extends State<Body> {
                 RoundeButton(
                   text: "Continue",
                   press: onSignInClicked,
+                  color: isDarkMode ? Color(0xFF969696) : Colors.blue,
                 ),
                 SizedBox(height: size.height * 0.22),
                 AlreadyHaveAnAccountCheck(

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Code Edu</string>
+    <string name="facebook_app_id">868885080500530</string>
+    <string name="fb_login_protocol_scheme">08b23b926438dbda99fbb1633f9f1cf5</string>
+</resources>

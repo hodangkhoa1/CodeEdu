@@ -3,22 +3,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
-class ProgressBar extends StatelessWidget {
+class ProgressBar extends StatefulWidget {
   const ProgressBar({
     Key key,
   }) : super(key: key);
 
   @override
+  _ProgressBarState createState() => _ProgressBarState();
+}
+
+class _ProgressBarState extends State<ProgressBar> {
+  @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
+      width: 375,
       height: 35,
       decoration: BoxDecoration(
         border: Border.all(
           color: Color(0xFF3F4768),
           width: 3,
         ),
-        borderRadius: BorderRadius.circular(50),
+        borderRadius: BorderRadius.circular(5),
       ),
       child: GetBuilder<QuestionController>(
         init: QuestionController(),
@@ -29,15 +34,8 @@ class ProgressBar extends StatelessWidget {
                 builder: (context, constraints) => Container(
                   width: constraints.maxWidth * controller.animation.value,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
-                      colors: [
-                        Color(0xFF46A0AE),
-                        Color(0xFF00FFCB),
-                      ],
-                    ),
-                    borderRadius: BorderRadius.circular(50)
+                    color: (controller.animation.value * 60 < 5) ? Colors.red : (controller.animation.value * 60 < 15) ? Colors.amber[400] : Color(0xFF46A0AE),
+                    borderRadius: BorderRadius.circular(2)
                   ),
                 )
               ),
@@ -50,9 +48,9 @@ class ProgressBar extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "${(controller.animation.value * 60).round()} sec",
+                        "${(controller.animation.value * 60).round()} minutes",
                         style: TextStyle(
-                          color: Colors.white
+                          color: (controller.animation.value * 60 < 5) ? Colors.black : (controller.animation.value * 60 < 15) ? Colors.black : Colors.white
                         ),
                       ),
                       SvgPicture.asset("assets/icons/clock.svg")

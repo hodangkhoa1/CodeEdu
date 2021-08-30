@@ -1,4 +1,3 @@
-import 'package:code_edu/Screens/home/home_screen.dart';
 import 'package:code_edu/Screens/to_do_app/components/body.dart';
 import 'package:flutter/material.dart';
 
@@ -22,9 +21,6 @@ class _ToDoPageState extends State<ToDoPage> {
           onPressed: (){
             setState(() {
               Navigator.pop(context);
-              // Navigator.of(context).push(MaterialPageRoute(
-              //   builder: (context) => HomeScreen(),
-              // ));
             });
           },
           icon: Icon(
@@ -37,6 +33,13 @@ class _ToDoPageState extends State<ToDoPage> {
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w400
+          ),
+        ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(1.0),
+          child: Container(
+            color: Colors.grey,
+            height: 1,
           ),
         ),
       ),

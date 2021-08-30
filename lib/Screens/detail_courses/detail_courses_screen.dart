@@ -1,148 +1,176 @@
-import 'package:code_edu/Screens/detail_courses/components/body.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:code_edu/Screens/detail_courses/components/course_content_list.dart';
+import 'package:code_edu/Screens/detail_courses/components/custom_app_bar.dart';
+import 'package:code_edu/Screens/detail_courses/components/custom_bottom_navigation_bar.dart';
+import 'package:code_edu/Screens/detail_courses/components/top_rounded_container.dart';
+import 'package:code_edu/data/category.dart';
 import 'package:code_edu/notifier/category_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-class DetailCoursesScreen extends StatelessWidget {
+class DetailCoursesScreen extends StatefulWidget {
   static String routeName = "/details";
+  final String showBottomBar;
+  final String urlAvatar;
+  final bool isDarkMode;
+
+  const DetailCoursesScreen({
+    Key key,
+    this.showBottomBar,
+    this.urlAvatar,
+    this.isDarkMode,
+  }) : super(key: key);
+
+  @override
+  _DetailCoursesScreenState createState() => _DetailCoursesScreenState();
+}
+
+class _DetailCoursesScreenState extends State<DetailCoursesScreen> {
+  bool showBottomBar = false;
+  final db = FirebaseFirestore.instance;
+  List<CoursesDetail> _courseContent = [];
+
   @override
   Widget build(BuildContext context) {
     CategoryNotifier categoryNotifier = Provider.of<CategoryNotifier>(context, listen: false);
+    Size size = MediaQuery.of(context).size;
+    //bool showBottomBar = (String.fromEnvironment(widget.showBottomBar) == "true") ? true : (String.fromEnvironment(widget.showBottomBar) == "false") ? false : false;
     return Scaffold(
-      backgroundColor: Color(0xFFF5F6F9),
-      appBar: CustomAppBar(),
-      body: Body(
-        category: categoryNotifier,
-      ),
-      bottomNavigationBar: Stack(
-        children: [
-          Container(
-            padding: EdgeInsets.all(20),
-            height: 100,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  offset: Offset(0, 4),
-                  blurRadius: 50,
-                  color: Color(0xFF0D1333).withOpacity(.1)
-                )
-              ],
-            ),
-            child: Row(
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.all(14),
-                  height: 56,
-                  width: 80,
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFFEDEE),
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  child: SvgPicture.asset("assets/icons/shopping-bag.svg"),
-                ),
-                SizedBox(width: 20),
-                Expanded(
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 56,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40),
-                      color: Color(0xFF6EBAFA),
-                    ),
-                    child: Text(
-                      "Enroll Now",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold
-                      ),
-                    ),
-                  )
-                ),
-              ],
-            ),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: NestedScrollView(
+        floatHeaderSlivers: true,
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          CustomAppBar(
+            innerBoxIsScrolled: innerBoxIsScrolled,
+            size: size,
+            isDarkMode: widget.isDarkMode,
           ),
         ],
-      ),
-    );
-  }
-}
-
-class CustomAppBar extends PreferredSize {
-  @override
-  Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
-
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(top: 15, left: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: Stack(
           children: [
-            Padding(
-              padding: EdgeInsets.only(left: 5),
-              child: SizedBox(
-                height: size.width * 0.1,
-                width: size.width * 0.1,
-                // ignore: deprecated_member_use
-                child: FlatButton(
-                  padding: EdgeInsets.only(left: 8),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50)),
-                  color: Colors.white,
-                  child: Icon(Icons.arrow_back_ios),
+            Container(
+              padding: EdgeInsets.only(top: 20),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: AspectRatio(
+                        aspectRatio: 1.80,
+                        child: Image.network(
+                          categoryNotifier.currentCategory.images,
+                          alignment: Alignment.center,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    TopRoundedContainer(
+                      color: widget.isDarkMode ? Color(0xFF313131) : Colors.white,
+                      child: Column(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 30),
+                              child: Text(
+                                "${categoryNotifier.currentCategory.fullNameCourses}" ?? "1",
+                                style: Theme.of(context).textTheme.headline6,
+                              ),
+                            ),
+                          ),
+                          Row(
+                            children: <Widget>[
+                              SizedBox(width: 35, height: 28),
+                              SvgPicture.asset(
+                                "assets/icons/person.svg",
+                                color: widget.isDarkMode ? Colors.blue : Colors.black,
+                              ),
+                              SizedBox(width: 5),
+                              Text("${categoryNotifier.currentCategory.numberVisitors}K"),
+                              SizedBox(width: 20),
+                              SvgPicture.asset("assets/icons/Star Icon.svg"),
+                              SizedBox(width: 5),
+                              Text(
+                                "${categoryNotifier.currentCategory.rating}" ?? "0",
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 25),
+                                child: Text(
+                                  "Course Content",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                              ),
+                              Spacer(),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Container(
+                                  padding: EdgeInsets.all(15),
+                                  width: 64,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFFFFE6E6),
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(20),
+                                      bottomLeft: Radius.circular(20)
+                                    )
+                                  ),
+                                  child: SvgPicture.asset(
+                                    "assets/icons/Heart Icon_2.svg",
+                                    color: Color(0xFFFF4848),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          Divider(
+                            height: 30,
+                            thickness: 0.5,
+                            color: widget.isDarkMode ? Colors.grey : Colors.black.withOpacity(0.3),
+                            indent: 32,
+                            endIndent: 32,
+                          ),
+                          SizedBox(height: 15),
+                          CourseContentList(
+                            categoryNotifier: categoryNotifier,
+                            courseDetail: _courseContent,
+                            db: db,
+                            urlAvatar: widget.urlAvatar,
+                            isDarkMode: widget.isDarkMode,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ),
-            ClipPath(
-              clipper: BestCoursesClipper(),
-              child: Container(
-                color: Color(0xFFFFD073),
-                padding: EdgeInsets.only(left: 10, top: 5, right: 20, bottom: 5),
-                child: Text(
-                  "New Course".toUpperCase(),
-                  style: TextStyle(fontWeight: FontWeight.w600),
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {},
-              child: Padding(
-                padding: EdgeInsets.only(right: 20),
-                child: SvgPicture.asset("assets/icons/more-vertical.svg")
               ),
             ),
           ],
         ),
       ),
+      bottomNavigationBar: showBottomBar == false ? CustomBottomNavigationBar(
+        isDarkMode: widget.isDarkMode,
+        onTap: (){},
+      ) : Stack(
+        children: [
+          Container(
+            height: 0,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+            ),
+          )
+        ]
+      )
     );
   }
-}
-
-class BestCoursesClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = Path();
-    path.lineTo(size.width - 20, 0);
-    path.lineTo(size.width, size.height / 2);
-    path.lineTo(size.width - 20, size.height);
-    path.lineTo(0, size.height);
-    path.lineTo(0, 0);
-    path.close();
-    return path;
-  }
-  
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
-    return false;
-  }
-  
 }

@@ -23,13 +23,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   flutter_html: ^1.0.2
-  firebase_core: ^0.4.0+9
+  firebase_core: ^1.4.0
   firebase_analytics: ^5.0.2
   cloud_firestore:
   firebase_database:
   sqflite:
   path:
+  bubble:
+  firebase_auth: ^3.0.1
+  local_auth: ^1.1.6
+  intl:
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -37,19 +43,33 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_svg: ^0.20.0-nullsafety.3
   sms_autofill: ^2.0.0
-  flutter_facebook_login: ^3.0.0
-  firebase_auth: ^0.16.1
+  flutter_facebook_auth: ^3.5.1
+  flutter_login_facebook:
   provider: ^5.0.0
   google_sign_in: ^4.5.9
   flutter_staggered_grid_view: ^0.4.0
   rxdart: ^0.27.1
   flutter_bloc: ^7.0.1
-  local_auth: ^1.1.6
   get: ^4.1.4
   font_awesome_flutter: ^9.1.0
   image_picker: ^0.6.2+3
   youtube_player_flutter: ^8.0.0
-  
+  splash_screen_view: ^3.0.0
+  animated_text_kit: ^4.2.1
+  fluttertoast: ^8.0.8
+  flutter_settings_screens: ^0.2.2+1
+  sliding_up_panel: ^2.0.0+1
+  connectivity: ^3.0.6
+  flutter_swiper: ^1.1.6
+  speech_to_text: ^5.0.0
+  avatar_glow: ^2.0.1
+  flip_card: ^0.5.0
+  flutter_rating_bar: ^4.0.0
+  shimmer: ^2.0.0
+  wiredash: ^0.7.0+1
+  lottie: ^1.1.0
+  syncfusion_flutter_pdfviewer: ^19.2.57-beta
+  shared_preferences: ^2.0.7
 
 dev_dependencies:
   flutter_test:
@@ -71,12 +91,14 @@ flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
+  generate: true
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/service/eloquent-hour-319919-0d112c009154.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

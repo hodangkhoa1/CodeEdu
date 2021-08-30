@@ -2,8 +2,15 @@ import 'package:code_edu/Screens/settings_screen/components/body.dart';
 import 'package:flutter/material.dart';
 
 class SettingScreen extends StatefulWidget {
+  final String urlImage;
+  final String name;
+  final String email;
+
   const SettingScreen({
-    Key key
+    Key key,
+    @required this.urlImage,
+    @required this.name,
+    @required this.email,
   }) : super(key: key);
 
   @override
@@ -18,14 +25,35 @@ class _SettingScreenState extends State<SettingScreen> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 1,
         leading: IconButton(
-          onPressed: (){},
+          onPressed: (){
+            setState(() {
+              Navigator.pop(context);
+            });
+          },
           icon: Icon(
             Icons.arrow_back_ios_new_outlined,
             color: Colors.blue,
           ),
         ),
+        title: Text(
+          "Settings",
+          style: TextStyle(
+            fontSize: 20
+          ),
+        ),
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(1.0),
+          child: Container(
+            color: Colors.grey,
+            height: 1,
+          ),
+        ),
       ),
-      body: Body(),
+      body: Body(
+        urlImage: widget.urlImage,
+        name: widget.name,
+        email: widget.email,
+      ),
     );
   }
 }

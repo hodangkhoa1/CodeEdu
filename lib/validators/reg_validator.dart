@@ -4,10 +4,11 @@ const String invalidEmailError = "Please enter valid email";
 const String passwordNullError = "Please enter your password";
 const String shortPasswordError = "Password is too weak";
 const String matchPasswordError = "Password does not match";
-const String firstNameNullError = "Please enter your first name";
-const String lastNameNullError = "Please enter your last name";
+const String nameUserNullError = "Please enter your Username";
 const String phoneNumberNullError = "Please enter your phone number";
-const String addressNullError = "Please enter your address";
+const String shortUserNameError = "Please enter Username larger than 5";
+const String shortPhoneNumberError = "Please enter 10 numbers";
+const String confirmPasswordError = "Please confirm password";
 
 class Validations {
   static bool isValidEmail(String email){

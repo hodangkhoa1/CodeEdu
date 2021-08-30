@@ -1,11 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ProfilePic extends StatelessWidget {
   final bool hide;
-  final File avatarImage;
+  final String avatarImage;
   final Function onPressedCamera;
   final Function onPressedGallery;
   
@@ -28,7 +26,7 @@ class ProfilePic extends StatelessWidget {
         overflow: Overflow.visible,
         children: [
           CircleAvatar(
-            backgroundImage: avatarImage == null ? AssetImage("assets/images/avatar.png") : FileImage(File(avatarImage.path)),
+            backgroundImage: NetworkImage(avatarImage),
           ),
           Positioned(
             right: -12,

@@ -1,6 +1,8 @@
+import 'package:code_edu/Screens/settings_screen/components/header_page.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/style.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
 class Body extends StatefulWidget {
   const Body({Key key}) : super(key: key);
@@ -244,8 +246,9 @@ const htmlData = r"""
 class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Settings.getValue<bool>(HeaderPage.keyDarkMode, true);
     return SingleChildScrollView(
-          child: Column(
+      child: Column(
         children: [
           Html(
             data: htmlData,
@@ -286,14 +289,15 @@ class _BodyState extends State<Body> {
               )
             }
           ),
-          SizedBox(height: 35),
+          SizedBox(height: 30),
           Text(
             "© 2020 Existing Code Edu.",
             style: TextStyle(
-              color: Colors.black,
+              color: isDarkMode ? Colors.white : Colors.black,
               fontSize: 16
             ),
-          )
+          ),
+          SizedBox(height: 15),
         ],
       ),
     );

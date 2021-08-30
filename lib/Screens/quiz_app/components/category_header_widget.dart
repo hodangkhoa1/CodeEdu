@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+// ignore: must_be_immutable
 class CategoryHeader extends StatelessWidget {
   final Color boxColor;
   final IconData icon;
   final String text;
+  final double size;
   Function onTap;
 
   CategoryHeader({
@@ -13,6 +15,7 @@ class CategoryHeader extends StatelessWidget {
     @required this.icon,
     @required this.text,
     @required this.onTap,
+    @required this.size
   }) : super(key: key);
 
   @override
@@ -31,7 +34,7 @@ class CategoryHeader extends StatelessWidget {
             FaIcon(
               icon,
               color: Colors.white,
-              size: 50,
+              size: size,
             ),
             SizedBox(height: 12),
             Text(
