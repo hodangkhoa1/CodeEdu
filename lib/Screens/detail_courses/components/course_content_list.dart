@@ -12,6 +12,7 @@ class CourseContentList extends StatefulWidget {
   final List<CoursesDetail> courseDetail;
   final String urlAvatar;
   final bool isDarkMode;
+  final bool isDone;
 
   const CourseContentList({
     Key key,
@@ -20,6 +21,7 @@ class CourseContentList extends StatefulWidget {
     @required this.courseDetail,
     @required this.urlAvatar,
     @required this.isDarkMode,
+    @required this.isDone,
   }) : super(key: key);
 
   @override
@@ -65,7 +67,7 @@ class _CourseContentListState extends State<CourseContentList> with TickerProvid
                     hours: widget.courseDetail[index].hours,
                     minutes: widget.courseDetail[index].minutes,
                     seconds: widget.courseDetail[index].seconds,
-                    isDone: widget.courseDetail[index].isDone,
+                    isDone: widget.isDone,
                     number: index < 9 ? "0${index + 1}" : "${index + 1}",
                     title: widget.courseDetail[index].title,
                     onTap: () {
@@ -82,8 +84,8 @@ class _CourseContentListState extends State<CourseContentList> with TickerProvid
                     },
                   );
                 }
-              ) : Lottie.network(
-                "https://assets6.lottiefiles.com/packages/lf20_aBYmBC.json",
+              ) : Lottie.asset(
+                "assets/images/38061-search.json",
                 height: MediaQuery.of(context).size.height * 0.30,
                 controller: _notFoundController,
                 onLoaded: (animation) {

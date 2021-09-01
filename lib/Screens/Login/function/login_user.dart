@@ -1,8 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:code_edu/AllWidgets/display_toast_message.dart';
 import 'package:code_edu/AllWidgets/progressDialog.dart';
 import 'package:code_edu/Screens/home/home_screen.dart';
+import 'package:code_edu/data/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -27,14 +28,17 @@ void loginAndAuthenticateUser(BuildContext context, TextEditingController emailT
         Navigator.pop(context);
         displayToastMessage(context, AppLocalizations.of(context).noRecordAccountMessage);
       })).user;
-
-      if(firebaseUsers.emailVerified != null) {
-        FirebaseDatabase.instance.reference().child(firebaseUsers.uid).once().then((DataSnapshot snap) {
-          if(snap.value != null) {
+      if(firebaseUsers.emailVerified == true) {
+        QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('users').get();
+        snapshot.docs.forEach((snapValue) {
+          if(snapValue != null) {
+            OurUserDetail ourUserDetail = OurUserDetail.fromMap(snapValue.data());
             Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen(
-              urlImage: snap.value['urlImage'].toString(),
-              nameTextAppBar: snap.value['name'].toString(),
-              emailGoogleLogin: snap.value['email'].toString(),
+              urlImage: ourUserDetail.urlImage,
+              nameTextAppBar: ourUserDetail.fullName,
+              emailGoogleLogin: ourUserDetail.email,
+              showBottomBar: ourUserDetail.enroll,
+              uid: ourUserDetail.uid,
             )), (Route<dynamic> route) => false);
             displayToastMessage(context, AppLocalizations.of(context).loginByUserAccount);
           } else {

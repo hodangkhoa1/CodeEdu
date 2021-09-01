@@ -10,9 +10,10 @@ class CategoryList extends StatefulWidget {
   final CategoryNotifier categoryNotifier;
   final bool isoffline;
   final Timer timer;
-  final String showBottomBar;
+  final bool showBottomBar;
   final String urlAvatar;
   final bool isDarkMode;
+  final String uid;
 
   const CategoryList({
     Key key,
@@ -22,6 +23,7 @@ class CategoryList extends StatefulWidget {
     @required this.showBottomBar,
     @required this.urlAvatar,
     @required this.isDarkMode,
+    @required this.uid,
   }) : super(key: key);
 
   @override
@@ -58,6 +60,7 @@ class _CategoryListState extends State<CategoryList> {
                           showBottomBar: widget.showBottomBar,
                           urlAvatar: widget.urlAvatar,
                           isDarkMode: widget.isDarkMode,
+                          uid: widget.uid,
                         );
                       }));
                     });

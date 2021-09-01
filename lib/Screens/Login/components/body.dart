@@ -139,8 +139,8 @@ class _LoginFormState extends State<Body> with TickerProviderStateMixin {
                           ),
                         ),
                         SizedBox(height: size.height * 0.02),
-                        Lottie.network(
-                          "https://assets8.lottiefiles.com/packages/lf20_q5pk6p1k.json",
+                        Lottie.asset(
+                          "assets/images/login.json",
                           height: size.height * 0.30,
                           controller: _loginController,
                           onLoaded: (animation) {
@@ -355,6 +355,7 @@ class _LoginFormState extends State<Body> with TickerProviderStateMixin {
                                     loginFacebook(
                                       context,
                                       loginStateSubscription,
+                                      AppLocalizations.of(context).loginByFacebook
                                     );
                                   });
                                 } else {
@@ -388,6 +389,7 @@ class _LoginFormState extends State<Body> with TickerProviderStateMixin {
                                     loginGoogle(
                                       context,
                                       loginStateSubscription,
+                                      AppLocalizations.of(context).loginByGoogle
                                     );
                                   });
                                 } else {

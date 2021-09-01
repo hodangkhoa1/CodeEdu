@@ -1,4 +1,5 @@
 import 'package:code_edu/Screens/settings_screen/components/header_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
@@ -54,17 +55,17 @@ class BuildHeader extends StatelessWidget {
                       maxLines: 1,
                       softWrap: false,
                     ),
-                    SizedBox(height: 4),
-                    Text(
-                      email,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white
-                      ),
-                      overflow: TextOverflow.fade,
-                      maxLines: 1,
-                      softWrap: false,
-                    )
+                    //SizedBox(height: 4),
+                    // Text(
+                    //   email,
+                    //   style: TextStyle(
+                    //     fontSize: 16,
+                    //     color: Colors.white
+                    //   ),
+                    //   overflow: TextOverflow.fade,
+                    //   maxLines: 1,
+                    //   softWrap: false,
+                    // )
                   ],
                 ),
               ),

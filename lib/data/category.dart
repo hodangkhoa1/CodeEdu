@@ -42,7 +42,6 @@ class Category {
 
 class CoursesDetail {
   int hours;
-  bool isDone;
   int minutes;
   int numberCourse;
   int seconds;
@@ -52,7 +51,6 @@ class CoursesDetail {
 
   CoursesDetail.fromMap(Map<String, dynamic> data) {
     hours = data['hours'];
-    isDone = data['isDone'];
     minutes = data['minutes'];
     numberCourse = data['numberCourse'];
     seconds = data['seconds'];

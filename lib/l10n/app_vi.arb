@@ -1,11 +1,5 @@
 {
     "language": "Tiếng Việt",
-    "headerLearnCode": "Học code",
-    "bodyLearnCode": "Học code mọi lúc, mọi nơi.",
-    "headerCodeEditing": "Viết code",
-    "bodyCodeEditing": "Bạn sẽ có kinh nghiệm viết code sau khi học một bài học nào đó.",
-    "headerQuizCode": "Quiz code",
-    "bodyQuizCode": "Sau mỗi bài học, bạn sẽ được làm một bài kiểm tra để ôn lại kiến thức.",
     "skip": "Bỏ qua",
     "next": "Kế tiếp",
     "getStartedNow": "BẮT ĐẦU",
@@ -16,6 +10,7 @@
     "yourPassword": "Mật khẩu của bạn",
     "authenticating": "Đang xác thực, Vui lòng đợi ...",
     "loginByGoogle": "Bạn đăng nhập bằng Google.",
+    "loginByFacebook": "Bạn đăng nhập bằng facebook",
     "loginByUserAccount": "Bạn đăng nhập bằng tài khoản.",
     "doNotHaveAnAccount": "Bạn chưa có tài khoản ? ",
     "alreadyHaveAnAccount": "Bạn đã có tài khoản ? ",
@@ -57,5 +52,9 @@
     "errorSupportTitle": "Lỗi",
     "errorNoFilePDFMsg": "PDF này sẽ sớm có. Vì chúng tôi đang cập nhật PDF mới nhất.",
     "errorNoVideoMsg": "Video này sẽ sớm có. Vì chúng tôi đang cập nhật video mới nhất.",
-    "playVideoLesson": "Phát video"
+    "playVideoLesson": "Phát video",
+    "courseContent": "Nội dung khóa học",
+    "successfully": "Thành công",
+    "congratulationsRegistrationCourse": "Chúc mừng bạn đã đăng ký thành công.",
+    "errorRegistrationCourse": "Bạn không thể đăng ký khóa học này."
 }

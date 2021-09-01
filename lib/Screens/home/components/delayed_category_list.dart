@@ -8,9 +8,10 @@ import 'package:flutter/material.dart';
 class DelayedCategoryList extends StatefulWidget {
   final CategoryNotifier categoryNotifier;
   final bool isoffline;
-  final String showBottomBar;
+  final bool showBottomBar;
   final String urlAvatar;
   final bool isDarkMode;
+  final String uid;
 
   const DelayedCategoryList({
     Key key,
@@ -19,6 +20,7 @@ class DelayedCategoryList extends StatefulWidget {
     @required this.showBottomBar,
     @required this.urlAvatar,
     @required this.isDarkMode,
+    @required this.uid,
   }) : super(key: key);
 
   @override
@@ -43,6 +45,7 @@ class _DelayedCategoryListState extends State<DelayedCategoryList> {
       showBottomBar: widget.showBottomBar,
       urlAvatar: widget.urlAvatar,
       isDarkMode: widget.isDarkMode,
+      uid: widget.uid,
     );
   }
 }

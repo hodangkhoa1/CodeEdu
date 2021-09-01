@@ -1,25 +1,27 @@
 import 'package:code_edu/Screens/code_app/code_app_screen.dart';
-import 'package:code_edu/Screens/home/components/body.dart';
 import 'package:code_edu/Screens/home/components/bottom_navigation_bar.dart';
 import 'package:code_edu/Screens/learn_course/learn_course.dart';
 import 'package:code_edu/Screens/quiz_app/quiz_app_screen.dart';
 import 'package:code_edu/Screens/settings_screen/components/header_page.dart';
 import 'package:code_edu/Screens/side_bar/side_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:code_edu/Screens/home/components/body.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
 class HomeScreen extends StatefulWidget {
   final String urlImage;
   final String nameTextAppBar;
   final String emailGoogleLogin;
-  final String showBottomBar;
+  final bool showBottomBar;
+  final String uid;
 
   const HomeScreen({
     Key key,
-    this.urlImage,
-    this.nameTextAppBar,
-    this.emailGoogleLogin,
-    this.showBottomBar,
+    @required this.urlImage,
+    @required this.nameTextAppBar,
+    @required this.emailGoogleLogin,
+    @required this.showBottomBar,
+    @required this.uid
   }) : super(key: key);
 
   @override
@@ -27,11 +29,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final isDarkMode = Settings.getValue<bool>(HeaderPage.keyDarkMode, true);
   int _index = 0;
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode = Settings.getValue<bool>(HeaderPage.keyDarkMode, true);
     return Scaffold(
       drawer: SideBar(
         urlImage: widget.urlImage,
@@ -39,16 +41,18 @@ class _HomeScreenState extends State<HomeScreen> {
         emailGoogleLogin: (widget.emailGoogleLogin != null) ? widget.emailGoogleLogin : "",
       ),
       body: Body(
-        showBottomBar: widget.showBottomBar,
         urlAvatar: widget.urlImage,
         nameTextAppBar: widget.nameTextAppBar,
+        showBottomBar: widget.showBottomBar,
+        uid: widget.uid,
       ),
       bottomNavigationBar: Stack(
         children: [
           _index == 0 ? Body(
-            showBottomBar: widget.showBottomBar,
             urlAvatar: widget.urlImage,
             nameTextAppBar: widget.nameTextAppBar,
+            showBottomBar: widget.showBottomBar,
+            uid: widget.uid,
           ) : (_index == 1 ? CodeAppScreen(
             urlImage: widget.urlImage,
           ) : _index == 2 ? QuizApp(

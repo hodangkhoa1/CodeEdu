@@ -47,7 +47,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50)
                 ),
-                color: widget.isDarkMode ? Color(0xFF313131) : Colors.white,
+                color: widget.isDarkMode ? Color(0xFF313131) : Colors.grey[200],
                 child: Icon(
                   Icons.arrow_back_ios
                 ),

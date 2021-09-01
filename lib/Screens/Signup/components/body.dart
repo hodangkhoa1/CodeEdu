@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:code_edu/AllWidgets/display_toast_message.dart';
 import 'package:code_edu/AllWidgets/progressDialog.dart';
+import 'package:code_edu/AllWidgets/show_dialog_error.dart';
 import 'package:code_edu/Screens/Login/login_screen.dart';
 import 'package:code_edu/Screens/Signup/components/background.dart';
 import 'package:code_edu/Screens/Signup/components/or_divider.dart';
@@ -12,12 +13,13 @@ import 'package:code_edu/components/form_error.dart';
 import 'package:code_edu/components/rounded_button.dart';
 import 'package:code_edu/components/social_card.dart';
 import 'package:code_edu/components/text_field_container.dart';
+import 'package:code_edu/data/user.dart';
 import 'package:code_edu/functions/login_facebook.dart';
 import 'package:code_edu/functions/login_google.dart';
+import 'package:code_edu/requestAPI/databaseUser.dart';
 import 'package:code_edu/validators/reg_validator.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -112,8 +114,8 @@ class _SignUpFormState extends State<Body> with TickerProviderStateMixin {
                     ),
                   ),
                   SizedBox(height: size.height * 0.03),
-                  Lottie.network(
-                    "https://assets4.lottiefiles.com/packages/lf20_jcikwtux.json",
+                  Lottie.asset(
+                    "assets/images/38435-register.json",
                     height: size.height * 0.4,
                     controller: _signupController,
                     onLoaded: (animation) {
@@ -176,7 +178,8 @@ class _SignUpFormState extends State<Body> with TickerProviderStateMixin {
                             setState(() {
                               loginFacebook(
                                 context,
-                                loginStateSubscription
+                                loginStateSubscription,
+                                AppLocalizations.of(context).loginByFacebook
                               );
                             });
                           } else {
@@ -186,7 +189,21 @@ class _SignUpFormState extends State<Body> with TickerProviderStateMixin {
                       ),
                       SocialCard(
                         icon: "assets/icons/github-logo.svg",
-                        press: () {},
+                        press: () {
+                          if(isoffline == false) {
+                            setState(() {
+                              showDialogError(
+                                context,
+                                AppLocalizations.of(context).errorSupportTitle,
+                                AppLocalizations.of(context).errorSupportMsg,
+                                "Okay",
+                                isDarkMode
+                              );
+                            });
+                          } else {
+                            displayToastMessage(context, AppLocalizations.of(context).pleaseConnectToTheInternet);
+                          }
+                        },
                       ),
                       SocialCard(
                         icon: "assets/icons/google-icon.svg",
@@ -196,6 +213,7 @@ class _SignUpFormState extends State<Body> with TickerProviderStateMixin {
                               loginGoogle(
                                 context,
                                 loginStateSubscription,
+                                AppLocalizations.of(context).loginByGoogle
                               );
                             });
                           } else {
@@ -445,6 +463,7 @@ class _SignUpFormState extends State<Body> with TickerProviderStateMixin {
   }
 
   void registerNewUser(BuildContext context) async {
+    OurUser _user = OurUser();
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -465,19 +484,15 @@ class _SignUpFormState extends State<Body> with TickerProviderStateMixin {
       })).user;
 
       if(firebaseUser != null) {
-        FirebaseDatabase.instance.reference().child(firebaseUser.uid);
-        Map userDataMap = {
-          "name": nameUserTextEditingController.text.trim(),
-          "email": emailTextEditingController.text.trim(),
-          "phone": phoneNumberTextEditingController.text.trim(),
-          "enroll": "false",
-          "urlImage": "https://firebasestorage.googleapis.com/v0/b/codeeduapp.appspot.com/o/21-avatar-outline.gif?alt=media&token=7b98a6a0-15c8-4fd0-9d78-2ed2d468112a",
-          "remember": "false",
-        };
-
-        FirebaseDatabase.instance.reference().child(firebaseUser.uid).set(userDataMap);
-        displayToastMessage(context, AppLocalizations.of(context).congratulationsCreated);
+        _user.uid = firebaseUser.uid;
+        _user.email = emailTextEditingController.text.trim();
+        _user.fullName = nameUserTextEditingController.text.trim();
+        _user.phoneNumber = phoneNumberTextEditingController.text.trim();
+        _user.urlImage = "https://firebasestorage.googleapis.com/v0/b/codeeduapp.appspot.com/o/21-avatar-outline.gif?alt=media&token=7b98a6a0-15c8-4fd0-9d78-2ed2d468112a";
+        _user.enroll = false;
+        OurDatabase().createUser(_user);
         sendVerificationEmail();
+        displayToastMessage(context, AppLocalizations.of(context).congratulationsCreated);
       } else {
         Navigator.pop(context);
         displayToastMessage(context, AppLocalizations.of(context).newUserAccountCreatedError);

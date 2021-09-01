@@ -9,7 +9,6 @@ import 'package:code_edu/requestAPI/wiredash_constants.dart';
 import 'package:code_edu/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -37,9 +36,7 @@ Future<void> main() async {
   });
 }
 
-DatabaseReference userRef = FirebaseDatabase.instance.reference().child("users");
-Stream<User> googleRef = AuthGoogleBloc().currentUser;
-Stream<User> facebookRef = AuthBlocFacebook().currentUser;
+User user = FirebaseAuth.instance.currentUser;
 
 class MyApp extends StatelessWidget {
   final _navigatorKey = GlobalKey<NavigatorState>();

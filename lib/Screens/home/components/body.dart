@@ -21,15 +21,17 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class Body extends StatefulWidget {
-  final String showBottomBar;
   final String urlAvatar;
   final String nameTextAppBar;
+  final bool showBottomBar;
+  final String uid;
 
   const Body({
     Key key,
-    @required this.showBottomBar,
     @required this.urlAvatar,
     @required this.nameTextAppBar,
+    @required this.showBottomBar,
+    @required this.uid,
   }) : super(key: key);
 
   @override
@@ -206,6 +208,7 @@ class _BodyState extends State<Body> with SingleTickerProviderStateMixin{
                               showBottomBar: widget.showBottomBar,
                               urlAvatar: widget.urlAvatar,
                               isDarkMode: isDarkMode,
+                              uid: widget.uid,
                             ),
                           ),
                         ],

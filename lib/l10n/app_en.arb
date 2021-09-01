@@ -3,12 +3,6 @@
     "@language":{
       "description": "The current Language"
     },
-    "headerLearnCode": "Learn code",
-    "bodyLearnCode": "Learn code anytime, anywhere.",
-    "headerCodeEditing": "Code editing",
-    "bodyCodeEditing": "You will experience coding after learning a certain lesson.",
-    "headerQuizCode": "Quiz code",
-    "bodyQuizCode": "After each lesson, you will be given a quiz to review your knowledge.",
     "skip": "SKIP",
     "next": "Next",
     "getStartedNow": "GET STARTED NOW",
@@ -19,6 +13,7 @@
     "yourPassword": "Your Password",
     "authenticating": "Authenticating, Please wait...",
     "loginByGoogle": "You are logged-in by Google.",
+    "loginByFacebook": "You are logged-in by Facebook.",
     "loginByUserAccount": "You are logged-in by user account.",
     "doNotHaveAnAccount": "Don't have an Account ? ",
     "alreadyHaveAnAccount": "Already have an Account ? ",
@@ -60,5 +55,9 @@
     "errorSupportTitle": "Error",
     "errorNoFilePDFMsg": "This PDF will be available soon. Because we are updating the latest PDF.",
     "errorNoVideoMsg": "This video will be available soon. Because we are updating the latest video.",
-    "playVideoLesson": "Play Video"
+    "playVideoLesson": "Play Video",
+    "courseContent": "Course Content",
+    "successfully": "Successfully",
+    "congratulationsRegistrationCourse": "Congratulations on your successful registration",
+    "errorRegistrationCourse": "You cannot register for this course"
 }
