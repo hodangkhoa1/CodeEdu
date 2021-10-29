@@ -6,6 +6,7 @@ class OurUser {
   String fullName;
   String phoneNumber;
   String urlImage;
+  String nameUniversity;
   bool enroll;
   Timestamp accountCreated;
 
@@ -15,8 +16,9 @@ class OurUser {
     this.fullName,
     this.phoneNumber,
     this.urlImage,
+    this.nameUniversity,
     this.enroll,
-    this.accountCreated
+    this.accountCreated,
   });
 }
 
@@ -26,7 +28,9 @@ class OurUserDetail {
   String fullName;
   String phoneNumber;
   String urlImage;
+  String nameUniversity;
   bool enroll;
+  Timestamp dateOfBirth;
 
   OurUserDetail.fromMap(Map<String, dynamic> data) {
     uid = data['uid'];
@@ -34,6 +38,8 @@ class OurUserDetail {
     fullName = data['fullName'];
     phoneNumber = data['phoneNumber'];
     urlImage = data['urlImage'];
+    nameUniversity = data['nameUniversity'];
     enroll = data['enroll'];
+    dateOfBirth = data['dateOfBirth'];
   }
 }

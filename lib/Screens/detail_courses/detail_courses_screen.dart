@@ -1,21 +1,15 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:code_edu/AllWidgets/display_toast_message.dart';
-import 'package:code_edu/AllWidgets/show_dialog_error.dart';
 import 'package:code_edu/Screens/detail_courses/components/course_content_list.dart';
-import 'package:code_edu/Screens/detail_courses/components/custom_app_bar.dart';
 import 'package:code_edu/Screens/detail_courses/components/custom_bottom_navigation_bar.dart';
-import 'package:code_edu/Screens/detail_courses/components/top_rounded_container.dart';
+import 'package:code_edu/Screens/detail_courses/components/enroll_function.dart';
+import 'package:code_edu/Screens/detail_courses/components/header_detail_course.dart';
 import 'package:code_edu/data/category.dart';
-import 'package:code_edu/data/facebookAccount.dart';
-import 'package:code_edu/data/googleAccount.dart';
-import 'package:code_edu/data/user.dart';
 import 'package:code_edu/notifier/category_notifier.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -24,6 +18,9 @@ class DetailCoursesScreen extends StatefulWidget {
   final String urlAvatar;
   final bool isDarkMode;
   final String uid;
+  final String titleCourse;
+  final String authorCourse;
+  final double startCourse;
 
   const DetailCoursesScreen({
     Key key,
@@ -31,6 +28,9 @@ class DetailCoursesScreen extends StatefulWidget {
     @required this.urlAvatar,
     @required this.isDarkMode,
     @required this.uid,
+    @required this.titleCourse,
+    @required this.authorCourse,
+    @required this.startCourse
   }) : super(key: key);
 
   @override
@@ -71,128 +71,114 @@ class _DetailCoursesScreenState extends State<DetailCoursesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool _checkEnroll = widget.showBottomBar;
     CategoryNotifier categoryNotifier = Provider.of<CategoryNotifier>(context, listen: false);
-    Size size = MediaQuery.of(context).size;
+    bool _checkEnroll = widget.showBottomBar;
+
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: NestedScrollView(
-        floatHeaderSlivers: true,
-        headerSliverBuilder: (context, innerBoxIsScrolled) => [
-          CustomAppBar(
-            innerBoxIsScrolled: innerBoxIsScrolled,
-            size: size,
-            isDarkMode: widget.isDarkMode,
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: widget.isDarkMode ? LinearGradient(
+            colors: [
+              Color(0xFF181818).withOpacity(0.9),
+              Color(0xFF3C4043),
+            ],
+            begin: const FractionalOffset(0.0, 0.4),
+            end: Alignment.topRight,
+          ) : LinearGradient(
+            colors: [
+              Color(0xFF0F17AD).withOpacity(0.9),
+              Color(0xFF6985E8),
+            ],
+            begin: const FractionalOffset(0.0, 0.4),
+            end: Alignment.topRight,
           ),
-        ],
-        body: Stack(
+        ),
+        child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.only(top: 20),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: AspectRatio(
-                        aspectRatio: 1.80,
-                        child: Image.network(
-                          categoryNotifier.currentCategory.images,
-                          alignment: Alignment.center,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 15),
-                    TopRoundedContainer(
-                      color: widget.isDarkMode ? Color(0xFF313131) : Colors.white,
-                      child: Column(
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 30),
-                              child: Text(
-                                "${categoryNotifier.currentCategory.fullNameCourses}" ?? "1",
-                                style: Theme.of(context).textTheme.headline6,
-                              ),
-                            ),
-                          ),
-                          Row(
-                            children: <Widget>[
-                              SizedBox(width: 35, height: 28),
-                              SvgPicture.asset(
-                                "assets/icons/person.svg",
-                                color: widget.isDarkMode ? Colors.blue : Colors.black,
-                              ),
-                              SizedBox(width: 5),
-                              Text("${categoryNotifier.currentCategory.numberVisitors}K"),
-                              SizedBox(width: 20),
-                              SvgPicture.asset("assets/icons/Star Icon.svg"),
-                              SizedBox(width: 5),
-                              Text(
-                                "${categoryNotifier.currentCategory.rating}" ?? "0",
-                              )
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 25),
-                                child: Text(
-                                  AppLocalizations.of(context).courseContent,
+            HeaderDetailCourse(
+              onTap: () {
+                Get.back();
+              },
+              titleCourse: widget.titleCourse,
+              startCourse: widget.startCourse,
+              authorCourse: "Author: ${widget.authorCourse}"
+            ),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: widget.isDarkMode ? Color(0xFF181818) : Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(70)
+                  )
+                ),
+                child: SingleChildScrollView(
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: db.collection('Courses').doc(categoryNotifier.currentCategory.courseID).collection('CoursesContent').snapshots(),
+                    builder: (context, snapshot) {
+                      if(snapshot.hasData) {
+                        var doc = snapshot.data.docs;
+                        doc.forEach((element) {
+                          CoursesDetail courseContent = CoursesDetail.fromMap(element.data());
+                          _courseContent.add(courseContent);
+                        });
+                        return Column(
+                          children: [
+                            SizedBox(height: 30),
+                            Row(
+                              children: [
+                                SizedBox(width: 30),
+                                Text(
+                                  "Total: ${doc.length} lessons",
                                   style: TextStyle(
                                     fontSize: 20,
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold
+                                    fontWeight: FontWeight.bold,
+                                    color: widget.isDarkMode ? Color(0xFF9999A9) : Color(0xFF2F2F51)
                                   ),
                                 ),
-                              ),
-                              Spacer(),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: Container(
-                                  padding: EdgeInsets.all(15),
-                                  width: 64,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFFFFE6E6),
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(20),
-                                      bottomLeft: Radius.circular(20)
+                                Expanded(child: Container()),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.loop,
+                                      size: 30,
+                                      color: Color(0xFF6D8DEA),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      "Reset",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Color(0xFF9999A9)
+                                      ),
                                     )
-                                  ),
-                                  child: SvgPicture.asset(
-                                    "assets/icons/Heart Icon_2.svg",
-                                    color: Color(0xFFFF4848),
-                                  ),
+                                  ],
                                 ),
-                              )
-                            ],
+                                SizedBox(width: 40)
+                              ],
+                            ),
+                            SizedBox(height: 20),
+                            CourseContentList(
+                              courseDetail: _courseContent,
+                              isDarkMode: widget.isDarkMode,
+                              isDone: _checkEnroll,
+                              doc: doc,
+                              urlAvatar: widget.urlAvatar,
+                            )
+                          ],
+                        );
+                      } else {
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 200),
+                          child: Center(
+                            child: CircularProgressIndicator(),
                           ),
-                          SizedBox(height: 10),
-                          Divider(
-                            height: 30,
-                            thickness: 0.5,
-                            color: widget.isDarkMode ? Colors.grey : Colors.black.withOpacity(0.3),
-                            indent: 32,
-                            endIndent: 32,
-                          ),
-                          SizedBox(height: 15),
-                          CourseContentList(
-                            categoryNotifier: categoryNotifier,
-                            courseDetail: _courseContent,
-                            db: db,
-                            urlAvatar: widget.urlAvatar,
-                            isDarkMode: widget.isDarkMode,
-                            isDone: widget.showBottomBar,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                        );
+                      }
+                    },
+                  )
                 ),
-              ),
-            ),
+              )
+            )
           ],
         ),
       ),
@@ -201,13 +187,13 @@ class _DetailCoursesScreenState extends State<DetailCoursesScreen> {
         onTap: () => enrollFunction(
           context,
           widget.isDarkMode,
-          widget.uid,
           _checkEnroll,
           isoffline,
           AppLocalizations.of(context).successfully,
           AppLocalizations.of(context).congratulationsRegistrationCourse,
           AppLocalizations.of(context).errorSupportTitle,
           AppLocalizations.of(context).errorRegistrationCourse,
+          AppLocalizations.of(context).pleaseConnectToTheInternet
         ),
       ) : Stack(
         children: [
@@ -221,86 +207,5 @@ class _DetailCoursesScreenState extends State<DetailCoursesScreen> {
         ]
       )
     );
-  }
-}
-
-Future<void> enrollFunction(BuildContext context, bool isDarkMode, String uid, bool checkEnroll, bool isoffline, String successfully, String congratulationsRegistrationCourse, String error, String errorRegistrationCourse) async {
-  User user = FirebaseAuth.instance.currentUser;
-
-  if(isoffline == false) {
-    if(user != null) {
-      QuerySnapshot snapshotUser = await FirebaseFirestore.instance.collection('users').get();
-      QuerySnapshot snapshotGoogle = await FirebaseFirestore.instance.collection('googleAccounts').get();
-      QuerySnapshot snapshotFacebook = await FirebaseFirestore.instance.collection('facebookAccounts').get();
-      snapshotUser.docs.forEach((snapValueUser) {
-        if(snapValueUser != null) {
-          OurUserDetail ourUserDetail = OurUserDetail.fromMap(snapValueUser.data());
-          if(ourUserDetail.uid == user.uid) {
-            FirebaseFirestore.instance.collection('users').doc(ourUserDetail.uid).update({
-              'enroll': true
-            }).whenComplete(() {
-              checkEnroll = !checkEnroll;
-              showDialogError(
-                context,
-                successfully,
-                congratulationsRegistrationCourse,
-                "Okay",
-                isDarkMode
-              );
-            });
-          } else {
-            snapshotGoogle.docs.forEach((snapValueGoogle) {
-              if(snapValueGoogle != null) {
-                OurGoogleDetail ourGoogleDetail = OurGoogleDetail.fromMap(snapValueGoogle.data());
-                if(ourGoogleDetail.uid == user.uid) {
-                  FirebaseFirestore.instance.collection('googleAccounts').doc(ourGoogleDetail.uid).update({
-                    'enroll': true
-                  }).whenComplete(() {
-                    checkEnroll = !checkEnroll;
-                    showDialogError(
-                      context,
-                      successfully,
-                      congratulationsRegistrationCourse,
-                      "Okay",
-                      isDarkMode
-                    );
-                  });
-                } else {
-                  snapshotFacebook.docs.forEach((snapValueFacebook) {
-                    if(snapValueFacebook != null) {
-                      OurFacebookDetail ourFacebookDetail = OurFacebookDetail.fromMap(snapValueFacebook.data());
-                      if(ourFacebookDetail.uid == user.uid) {
-                        FirebaseFirestore.instance.collection('facebookAccounts').doc(ourFacebookDetail.uid).update({
-                          'enroll': true
-                        }).whenComplete(() {
-                          checkEnroll = !checkEnroll;
-                          showDialogError(
-                            context,
-                            successfully,
-                            congratulationsRegistrationCourse,
-                            "Okay",
-                            isDarkMode
-                          );
-                        });
-                      }
-                    }
-                  });
-                }
-              }
-            });
-          }
-        }
-      });
-    } else {
-      showDialogError(
-        context,
-        error,
-        errorRegistrationCourse,
-        "Okay",
-        isDarkMode
-      );
-    }
-  } else {
-    displayToastMessage(context, AppLocalizations.of(context).pleaseConnectToTheInternet);
   }
 }

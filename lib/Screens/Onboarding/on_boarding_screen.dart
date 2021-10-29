@@ -7,6 +7,8 @@ import 'package:code_edu/data/data_on_boarding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Onboarding extends StatefulWidget {
   @override
@@ -23,6 +25,19 @@ class _OnboardingState extends State<Onboarding> {
   void initState() {
     super.initState();
     slides = getSlides();
+    requestPermission();
+  }
+
+  void requestPermission() async {
+    PermissionStatus permissionMicrophone = await Permission.microphone.status;
+    PermissionStatus permissionCamera = await Permission.camera.status;
+
+    if (permissionMicrophone != PermissionStatus.granted) {
+      await Permission.microphone.request();
+    }
+    if(permissionCamera != PermissionStatus.granted) {
+      await Permission.camera.request();
+    }
   }
 
   // ignore: missing_return
@@ -118,11 +133,7 @@ class _OnboardingState extends State<Onboarding> {
               height: Platform.isAndroid ? 70 : 60,
               color: isDarkMode ? Color(0xFF4D4D4D) : Colors.blue,
               child: GestureDetector(
-                onTap: (){
-                  setState(() {
-                    Navigator.of(context).pushNamedAndRemoveUntil(WelcomeScreen.routeName, (Route<dynamic> route) => false);
-                  });
-                },
+                onTap: () => Get.to(WelcomeScreen()),
                 child: Text(
                   AppLocalizations.of(context).getStartedNow,
                   style: TextStyle(

@@ -1,8 +1,6 @@
 import 'dart:async';
 
-import 'package:code_edu/AllWidgets/display_toast_message.dart';
 import 'package:code_edu/Screens/Login/login_screen.dart';
-import 'package:code_edu/Screens/help_center/help_center.dart';
 import 'package:code_edu/Screens/policy_terms_screen/policy_screen.dart';
 import 'package:code_edu/Screens/profile/profile_screen.dart';
 import 'package:code_edu/Screens/settings_screen/components/header_page.dart';
@@ -14,22 +12,34 @@ import 'package:code_edu/Screens/to_do_app/home_to_do_page.dart';
 import 'package:code_edu/Screens/update/update_screen.dart';
 import 'package:code_edu/blocs/auth_bloc_facebook.dart';
 import 'package:code_edu/blocs/auth_bloc_google.dart';
+import 'package:code_edu/components/display_toast_message.dart';
+import 'package:code_edu/components/progressDialog.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:kommunicate_flutter/kommunicate_flutter.dart';
 
 class SideBar extends StatefulWidget {
   final String urlImage;
-  final String nameGoogleLogin;
-  final String emailGoogleLogin;
+  final String nameUser;
+  final String nameUniversity;
+  final String emailUser;
+  final String phoneNumber;
+  final String uid;
+  final DateTime dateOfBirth;
 
   const SideBar({
     Key key,
-    this.urlImage,
-    this.nameGoogleLogin,
-    this.emailGoogleLogin,
+    @required this.urlImage,
+    @required this.nameUser,
+    @required this.emailUser,
+    @required this.nameUniversity,
+    @required this.phoneNumber,
+    @required this.uid,
+    @required this.dateOfBirth,
   }) : super(key: key);
   
   @override
@@ -41,6 +51,34 @@ class _SideBarState extends State<SideBar> {
   final isDarkMode = Settings.getValue<bool>(HeaderPage.keyDarkMode, true);
   StreamSubscription<User> homeStateFacebook;
   StreamSubscription<User> homeStateGoogle;
+  bool isoffline = false;
+  StreamSubscription internetconnection;
+
+  @override
+  void initState() {
+    internetconnection = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      if(result == ConnectivityResult.none){
+        setState(() {
+          isoffline = true;
+        });
+      }else if(result == ConnectivityResult.mobile){
+        setState(() {
+          isoffline = false;
+        });
+      }else if(result == ConnectivityResult.wifi){
+        setState(() {
+          isoffline = false;
+        });
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    internetconnection.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,17 +88,20 @@ class _SideBarState extends State<SideBar> {
         child: ListView(
           children: <Widget>[
             BuildHeader(
-              urlImage: widget.urlImage != null ? widget.urlImage : "https://firebasestorage.googleapis.com/v0/b/codeeduapp.appspot.com/o/21-avatar-outline.gif?alt=media&token=7b98a6a0-15c8-4fd0-9d78-2ed2d468112a",
-              name: widget.nameGoogleLogin,
-              email: widget.emailGoogleLogin,
+              urlImage: widget.urlImage,
+              name: widget.nameUser,
+              email: widget.emailUser,
               onClicked: (){
                 setState(() {
                   Navigator.of(context).pop();
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ProfileScreen(
-                      nameProfile: widget.nameGoogleLogin,
-                      emailProfile: widget.emailGoogleLogin,
                       urlImage: widget.urlImage,
+                      nameUser: widget.nameUser,
+                      nameUniversity: widget.nameUniversity,
+                      emailUser: widget.emailUser,
+                      phoneNumber: widget.phoneNumber,
+                      dateOfBirth: widget.dateOfBirth,
                     ),
                   ));
                 });
@@ -167,14 +208,15 @@ class _SideBarState extends State<SideBar> {
       case 4:
         Navigator.of(context).pop();
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingScreen(
-          urlImage: widget.urlImage != null ? widget.urlImage : "https://firebasestorage.googleapis.com/v0/b/codeeduapp.appspot.com/o/21-avatar-outline.gif?alt=media&token=7b98a6a0-15c8-4fd0-9d78-2ed2d468112a",
-          name: widget.nameGoogleLogin,
-          email: widget.emailGoogleLogin,
+          urlImage: widget.urlImage,
+          name: widget.nameUser,
+          email: widget.emailUser,
+          uid: widget.uid,
         )));
         break;
       case 5:
         Navigator.of(context).pop();
-        Navigator.of(context).pushNamed(HelpCenter.routeName);
+        launchChat();
         break;
       case 6:
         Navigator.of(context).pop();
@@ -182,25 +224,16 @@ class _SideBarState extends State<SideBar> {
         break;
       case 7:
         Navigator.of(context).pop();
-        if(AuthBlocFacebook().fb.isLoggedIn != null) {
-          logoutFacebook();
+        if(isoffline == false) {
+          if(AuthBlocFacebook().fb.isLoggedIn != null) {
+            logoutFacebook();
+          }
+          if(AuthGoogleBloc().googleSignin.isSignedIn() != null) {
+            logoutGoogle();
+          }
+        } else {
+          displayToastMessage(context, AppLocalizations.of(context).pleaseConnectToTheInternet);
         }
-        if(AuthGoogleBloc().googleSignin.isSignedIn() != null) {
-          logoutGoogle();
-        }
-        // if(AuthService().currentUser != null) {
-        //   final authService = AuthService();
-        //   AuthService().logout();
-        //   authService.currentUser.listen((googleUser) {
-        //     if(googleUser == null) {
-        //       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (_) => LoginScreen(
-        //         isDarkMode: isDarkMode,
-        //       )), (route) => false);
-        //     }
-        //   });
-        // } else if(AuthBlocFacebook().currentUser != null) {
-        //   logoutFacebook();
-        // }
         break;
     }
   }
@@ -229,5 +262,27 @@ class _SideBarState extends State<SideBar> {
         displayToastMessage(context, "Bạn đăng xuất google");
       }
     });
+  }
+
+  void launchChat() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return ProgressDialog(
+          message: "Đang tìm kiếm người hỗ trợ bạn",
+        );
+      }
+    );
+
+    try {
+      dynamic conversationObject = {
+          'appId': '3bd1adb2e63cea55e5a62d833cb0ab6e1'
+      };
+      final result = await KommunicateFlutterPlugin.buildConversation(conversationObject);
+      print("Conversation builder success : " + result.toString());
+    } on Exception catch (e) {
+      print("Conversation builder error occurred : " + e.toString());
+    }
   }
 }

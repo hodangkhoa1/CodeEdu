@@ -3,10 +3,17 @@ import 'package:flutter/material.dart';
 class TextFieldContainer extends StatelessWidget {
   final Widget child;
   final Color color;
+  final BorderRadiusGeometry borderRadius;
+  final TextEditingController textEditingController;
+  final List<String> errors;
+
   const TextFieldContainer({
     Key key, 
-    this.child,
-    this.color
+    @required this.child,
+    @required this.color,
+    @required this.borderRadius,
+    @required this.textEditingController,
+    @required this.errors
   }) : super(key: key);
 
   @override
@@ -17,9 +24,9 @@ class TextFieldContainer extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       width: size.width * 0.9,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(29),
+        borderRadius: borderRadius,
         border: Border.all(
-          color: color,
+          color: (textEditingController.text.trim().isNotEmpty || errors.isNotEmpty) ? color : Colors.grey,
           width: 1.0
         ),
       ),

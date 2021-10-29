@@ -68,7 +68,7 @@ class HeaderPage extends StatelessWidget {
         SwitchSettingsTile(
           title: "Dark Mode",
           leading: IconWidget(
-            icon: Icons.dark_mode,
+            icon: isDarkMode ? Icons.dark_mode : Icons.wb_sunny_outlined,
             color: Color(0xFF642ef3)
           ),
           settingKey: keyDarkMode,

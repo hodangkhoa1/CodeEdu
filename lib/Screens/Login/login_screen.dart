@@ -2,12 +2,11 @@ import 'package:code_edu/Screens/Login/components/body.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
-  static String routeName = "/loginScreen";
   final bool isDarkMode;
 
   const LoginScreen({
     Key key,
-    this.isDarkMode
+    @required this.isDarkMode
   }) : super(key: key);
   
   @override

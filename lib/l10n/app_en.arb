@@ -31,7 +31,8 @@
     "pleaseEnterYourUsername": "Please enter your Username",
     "pleaseEnterValidEmail": "Please enter valid email",
     "pleaseEnterYourPhoneNumber": "Please enter your phone number",
-    "passwordIsTooWeak": "Password is too weak",
+    "passwordIsTooWeak": "Password is too low",
+    "passwordIsTooFair": "Password must be at least 8 characters including one lowercase letter, one uppercase letter and !@#*",
     "passwordDoesNotMatch": "Password does not match",
     "or": "OR",
     "pleaseConnectToTheInternet": "Please connect to the internet",
@@ -59,5 +60,42 @@
     "courseContent": "Course Content",
     "successfully": "Successfully",
     "congratulationsRegistrationCourse": "Congratulations on your successful registration",
-    "errorRegistrationCourse": "You cannot register for this course"
+    "errorRegistrationCourse": "You cannot register for this course",
+    "editProfile": "Edit Profile",
+    "accountText": "account",
+    "changePassword": "Change Password",
+    "notifications": "Notifications",
+    "deleteAccount": "Delete Account",
+    "save": "save",
+    "cannotResetPassword": "You cannot Reset Password.",
+    "warningSupportTitle": "Warning",
+    "nAccountDoesNotExist": "{accountUser} account does not exist.",
+    "@nAccountDoesNotExist": {
+      "description": "A account does not exist message",
+      "placeholders": {
+         "accountUser": {
+           "type": "String"
+         }
+      }
+    },
+    "sentLinkResetPassword": "A password reset link has been sent to {accountReset}.",
+    "@sentLinkResetPassword": {
+      "description": "A password reset link message",
+      "placeholders": {
+         "accountReset": {
+           "type": "String"
+         }
+      }
+    },
+    "urlImageQuizNullError": "Please enter url image",
+    "invalidUrlError": "Please enter valid url.",
+    "titleNullError": "Please enter your title Quiz.",
+    "descriptionQuizNullError": "Please enter your description Quiz.",
+    "numberQuestionNullError": "Please enter the number of questions.",
+    "titleNoteNullError": "Please enter your title Note",
+    "titleTaskNullError": "Please enter your title Task",
+    "noteTaskNullError": "Please enter your note Task",
+    "universityNullError": "Please select a school name.",
+    "birthdayNullError": "Please select your birthday.",
+    "addressNullError": "Please enter your address."
 }

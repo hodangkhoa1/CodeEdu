@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:code_edu/AllWidgets/display_toast_message.dart';
 import 'package:code_edu/Screens/Login/login_screen.dart';
 import 'package:code_edu/Screens/Signup/signup_screen.dart';
 import 'package:code_edu/Screens/Welcome/components/background.dart';
 import 'package:code_edu/Screens/home/home_screen.dart';
 import 'package:code_edu/blocs/auth_bloc_facebook.dart';
 import 'package:code_edu/blocs/auth_bloc_google.dart';
+import 'package:code_edu/components/display_toast_message.dart';
 import 'package:code_edu/components/rounded_button.dart';
 import 'package:code_edu/data/facebookAccount.dart';
 import 'package:code_edu/data/googleAccount.dart';
@@ -88,9 +88,7 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
               animatedTexts: [
                 TypewriterAnimatedText(
                   AppLocalizations.of(context).welcomeToCodeEdu,
-                  speed: Duration(
-                    milliseconds: 100
-                  ),
+                  speed: Duration(milliseconds: 100),
                   textStyle: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 21,
@@ -99,9 +97,7 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                 ),
               ],
             ),
-            SizedBox(
-              height: size.height * 0.03,
-            ),
+            SizedBox(height: size.height * 0.03),
             FadeTransition(
               opacity: _animationController,
               child: Lottie.asset(
@@ -132,10 +128,13 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                           if(ourUserDetail.uid == user.uid) {
                             Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen(
                               urlImage: ourUserDetail.urlImage,
-                              nameTextAppBar: ourUserDetail.fullName,
-                              emailGoogleLogin: ourUserDetail.email,
+                              nameUser: ourUserDetail.fullName,
+                              nameUniversity: ourUserDetail.nameUniversity,
+                              emailUser: ourUserDetail.email,
+                              phoneNumber: ourUserDetail.phoneNumber,
                               showBottomBar: ourUserDetail.enroll,
                               uid: ourUserDetail.uid,
+                              dateOfBirth: ourUserDetail.dateOfBirth.toDate(),
                             )), (Route<dynamic> route) => false);
                             displayToastMessage(context, AppLocalizations.of(context).loginByUserAccount);
                           } else {
@@ -146,10 +145,13 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                                   AuthGoogleBloc().currentUser.listen((googleUser) {
                                     Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen(
                                       urlImage: googleUser.photoURL,
-                                      nameTextAppBar: googleUser.displayName,
-                                      emailGoogleLogin: googleUser.email,
+                                      nameUser: googleUser.displayName,
+                                      nameUniversity: ourGoogleDetail.nameUniversity,
+                                      emailUser: googleUser.email != null ? googleUser.email : (ourGoogleDetail.email != null ? ourGoogleDetail.email : ""),
+                                      phoneNumber: ourGoogleDetail.phoneNumber != null ? ourGoogleDetail.phoneNumber : "",
                                       showBottomBar: ourGoogleDetail.enroll,
                                       uid: googleUser.uid,
+                                      dateOfBirth: ourGoogleDetail.dateOfBirth.toDate(),
                                     )), (Route<dynamic> route) => false);
                                     displayToastMessage(context, AppLocalizations.of(context).loginByGoogle);
                                   });
@@ -161,12 +163,15 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                                         AuthBlocFacebook().currentUser.listen((facebookUser) {
                                           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen(
                                             urlImage: facebookUser.photoURL,
-                                            nameTextAppBar: facebookUser.displayName,
-                                            emailGoogleLogin: facebookUser.email == null ? facebookUser.phoneNumber : facebookUser.email,
+                                            nameUser: facebookUser.displayName,
+                                            nameUniversity: ourFacebookDetail.nameUniversity,
+                                            emailUser: ourFacebookDetail.email != null ? ourFacebookDetail.email : "",
+                                            phoneNumber: ourFacebookDetail.phoneNumber != null ? ourFacebookDetail.phoneNumber : "",
                                             showBottomBar: ourFacebookDetail.enroll,
                                             uid: facebookUser.uid,
+                                            dateOfBirth: ourFacebookDetail.dateOfBirth.toDate(),
                                           )), (Route<dynamic> route) => false);
-                                          displayToastMessage(context, "Bạn đăng nhập bằng facebook");
+                                          displayToastMessage(context, AppLocalizations.of(context).loginByFacebook);
                                         });
                                       }
                                     }
@@ -189,7 +194,7 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                 color: widget.isDarkMode ? Color(0xFF969696) : Colors.blue,
               ),
             ),
-            FadeTransition(
+            user == null ? FadeTransition(
               opacity: _animationController,
               child: RoundeButton(
                 text: AppLocalizations.of(context).signUp,
@@ -205,7 +210,7 @@ class _BodyState extends State<Body> with TickerProviderStateMixin {
                   }
                 },
               ),
-            ),
+            ) : Container(),
           ],
         ),
       ),

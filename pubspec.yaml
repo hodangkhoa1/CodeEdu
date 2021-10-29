@@ -36,9 +36,7 @@ dependencies:
   firebase_auth: ^3.0.1
   local_auth: ^1.1.6
   intl:
-  cupertino_icons: ^1.0.2
   flutter_svg: ^0.20.0-nullsafety.3
-  sms_autofill: ^2.0.0
   flutter_facebook_auth: ^3.5.1
   flutter_login_facebook:
   provider: ^5.0.0
@@ -50,6 +48,7 @@ dependencies:
   font_awesome_flutter: ^9.1.0
   image_picker: ^0.6.2+3
   youtube_player_flutter: ^8.0.0
+  video_player:
   splash_screen_view: ^3.0.0
   animated_text_kit: ^4.2.1
   fluttertoast: ^8.0.8
@@ -66,6 +65,14 @@ dependencies:
   lottie: ^1.1.0
   syncfusion_flutter_pdfviewer: ^19.2.57-beta
   flutter_config: ^2.0.0
+  firebase_storage: ^10.0.3
+  alan_voice: ^2.4.0
+  permission_handler: ^8.1.4+2
+  kommunicate_flutter: ^1.2.2
+  google_fonts: ^2.1.0
+  flutter_slidable: ^0.6.0
+  flutter_colorpicker: ^0.6.0
+  date_picker_timeline: ^1.2.3
 
 dev_dependencies:
   flutter_test:

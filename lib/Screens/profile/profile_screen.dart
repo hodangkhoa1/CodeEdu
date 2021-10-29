@@ -2,15 +2,21 @@ import 'package:code_edu/Screens/profile/components/body.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
-  final String nameProfile;
-  final String emailProfile;
   final String urlImage;
+  final String nameUser;
+  final String nameUniversity;
+  final String emailUser;
+  final String phoneNumber;
+  final DateTime dateOfBirth;
 
   const ProfileScreen({
     Key key,
-    @required this.nameProfile,
-    @required this.emailProfile,
     @required this.urlImage,
+    @required this.nameUser,
+    @required this.nameUniversity,
+    @required this.emailUser,
+    @required this.phoneNumber,
+    @required this.dateOfBirth,
   }) : super(key: key);
 
   @override
@@ -32,9 +38,12 @@ class ProfileScreen extends StatelessWidget {
         ),
       ),
       body: Body(
-        nameProfile: nameProfile,
-        emailProfile: emailProfile,
         urlImage: urlImage,
+        nameUser: nameUser,
+        nameUniversity: nameUniversity,
+        emailUser: emailUser,
+        phoneNumber: phoneNumber,
+        dateOfBirth: dateOfBirth,
       ),
     );
   }

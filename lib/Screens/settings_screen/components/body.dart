@@ -1,22 +1,28 @@
+import 'package:alan_voice/alan_voice.dart';
 import 'package:code_edu/Screens/settings_screen/components/change_password.dart';
 import 'package:code_edu/Screens/settings_screen/components/edit_profile.dart';
 import 'package:code_edu/Screens/settings_screen/components/header_page.dart';
 import 'package:code_edu/Screens/settings_screen/components/icon_widget.dart';
-import 'package:code_edu/Screens/settings_screen/components/motifications_page.dart';
+import 'package:code_edu/Screens/settings_screen/components/notifications_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:wiredash/wiredash.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Body extends StatefulWidget {
   final String urlImage;
   final String name;
   final String email;
+  final String uid;
+  static const keyVirtualAssistant = 'key-virtual-assistant';
 
   const Body({
     Key key,
     @required this.urlImage,
     @required this.name,
     @required this.email,
+    @required this.uid
   }) : super(key: key);
 
   @override
@@ -24,6 +30,25 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  final isVirtualAssistant = Settings.getValue<bool>(Body.keyVirtualAssistant, false);
+
+  @override
+  void initState() {
+    isVirtualAssistant ? setupAlan() : removeAlan();
+    super.initState();
+  }
+
+  setupAlan() {
+    AlanVoice.addButton(
+      "abb2dc3cb0f142707fc0244717fba2182e956eca572e1d8b807a3e2338fdd0dc/stage",
+      buttonAlign: AlanVoice.BUTTON_ALIGN_RIGHT
+    );
+  }
+
+  removeAlan() {
+    AlanVoice.removeButton();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -41,7 +66,7 @@ class _BodyState extends State<Body> {
               Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: Text(
-                  "ACCOUNT",
+                  AppLocalizations.of(context).accountText.toUpperCase(),
                   style: TextStyle(
                     fontSize: 20
                   ),
@@ -58,7 +83,10 @@ class _BodyState extends State<Body> {
                   onTap: (){
                     setState(() {
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => EditProfile()
+                        builder: (context) => EditProfile(
+                          urlImage: widget.urlImage,
+                          uid: widget.uid,
+                        )
                       ));
                     });
                   },
@@ -72,7 +100,7 @@ class _BodyState extends State<Body> {
                         ),
                         SizedBox(width: 20),
                         Text(
-                          "Edit Profile",
+                          AppLocalizations.of(context).editProfile,
                           style: TextStyle(
                             fontSize: 17
                           ),
@@ -103,7 +131,7 @@ class _BodyState extends State<Body> {
                         ),
                         SizedBox(width: 20),
                         Text(
-                          "Change Password",
+                          AppLocalizations.of(context).changePassword,
                           style: TextStyle(
                             fontSize: 17
                           ),
@@ -117,7 +145,7 @@ class _BodyState extends State<Body> {
               Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: Text(
-                  "SETTINGS",
+                  AppLocalizations.of(context).settings.toUpperCase(),
                   style: TextStyle(
                     fontSize: 20
                   ),
@@ -148,7 +176,7 @@ class _BodyState extends State<Body> {
                         ),
                         SizedBox(width: 20),
                         Text(
-                          "Notifications",
+                          AppLocalizations.of(context).notifications,
                           style: TextStyle(
                             fontSize: 17
                           ),
@@ -158,41 +186,15 @@ class _BodyState extends State<Body> {
                   ),
                 ),
               ),
-              // SettingsGroup(
-              //   title: "General",
-              //   children: [
-              //     const SizedBox(height: 10),
-              //     AccountPage(),
-              //     const SizedBox(height: 10),
-              //     NotificationsPage(),
-              //   ]
-              // ),
-              // const SizedBox(height: 20),
-              // SettingsGroup(
-              //   title: "Feedback",
-              //   children: [
-              //     const SizedBox(height: 10),
-              //     SimpleSettingsTile(
-              //       title: "Report a bug",
-              //       subtitle: '',
-              //       leading: IconWidget(
-              //         color: Colors.teal,
-              //         icon: Icons.bug_report
-              //       ),
-              //       onTap: (){},
-              //     ),
-              //     const SizedBox(height: 10),
-              //     SimpleSettingsTile(
-              //       title: "Send Feedback",
-              //       subtitle: '',
-              //       leading: IconWidget(
-              //         color: Colors.purple,
-              //         icon: Icons.thumb_up,
-              //       ),
-              //       onTap: (){},
-              //     )
-              //   ]
-              // ),
+              SwitchSettingsTile(
+                title: "Virtual Assistant",
+                leading: IconWidget(
+                  icon: Icons.accessibility,
+                  color: Color(0xFF642ef3)
+                ),
+                settingKey: Body.keyVirtualAssistant,
+                onChange: (_){},
+              ),
               const SizedBox(height: 35),
               // ignore: deprecated_member_use
               FlatButton(
@@ -211,7 +213,7 @@ class _BodyState extends State<Body> {
                       ),
                       SizedBox(width: 10),
                       Text(
-                        "Delete Account",
+                        AppLocalizations.of(context).deleteAccount,
                         style: TextStyle(
                           fontSize: 16,
                           color: Colors.white

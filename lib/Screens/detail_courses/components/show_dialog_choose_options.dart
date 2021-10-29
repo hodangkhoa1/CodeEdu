@@ -1,10 +1,11 @@
-import 'package:code_edu/AllWidgets/show_dialog_error.dart';
 import 'package:code_edu/Screens/play_video_courses/play_video_courses.dart';
 import 'package:code_edu/Screens/read_pdf/read_pdf_screen.dart';
 import 'package:code_edu/components/custom_page_route.dart';
+import 'package:code_edu/components/show_dialog_error.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get/get.dart';
 
 void showDialogChooseOptions(BuildContext context, String urlVideo, String urlPDF, String urlAvatar, String title, bool isDarkMode) {
   showGeneralDialog(
@@ -42,12 +43,18 @@ void showDialogChooseOptions(BuildContext context, String urlVideo, String urlPD
                         AppLocalizations.of(context).errorSupportTitle,
                         AppLocalizations.of(context).errorNoFilePDFMsg,
                         "Okay",
-                        isDarkMode
+                        isDarkMode,
+                        "assets/images/8750-alert.json",
+                        18,
+                        () {
+                          Navigator.of(context).pop();
+                        }
                       );
                     } else {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => ReadPDFScreen(
-                        urlPDF: urlPDF,
-                      )));
+                      Get.to(ReadPDFScreen(urlPDF: urlPDF));
+                      // Navigator.of(context).push(MaterialPageRoute(builder: (_) => ReadPDFScreen(
+                      //   urlPDF: urlPDF,
+                      // )));
                     }
                   },
                   color: isDarkMode ? Color(0xFF313131) : Color(0xFFD0D0D0),
@@ -81,19 +88,29 @@ void showDialogChooseOptions(BuildContext context, String urlVideo, String urlPD
                         AppLocalizations.of(context).errorSupportTitle,
                         AppLocalizations.of(context).errorNoVideoMsg,
                         "Okay",
-                        isDarkMode
+                        isDarkMode,
+                        "assets/images/8750-alert.json",
+                        18,
+                        () {
+                          Navigator.of(context).pop();
+                        }
                       );
                     } else {
-                      Navigator.of(context).push(
-                        CustomPageRoute(
-                          direction: AxisDirection.up,
-                          child: PlayVideoCourses(
-                            url: urlVideo,
-                            urlAvatar: urlAvatar,
-                            nameLesson: title,
-                          ),
-                        ),
-                      );
+                      Get.to(PlayVideoCourses(
+                        url: urlVideo,
+                        nameLesson: title,
+                        urlAvatar: urlAvatar,
+                      ));
+                      // Navigator.of(context).push(
+                      //   CustomPageRoute(
+                      //     direction: AxisDirection.up,
+                      //     child: PlayVideoCourses(
+                      //       url: urlVideo,
+                      //       urlAvatar: urlAvatar,
+                      //       nameLesson: title,
+                      //     ),
+                      //   ),
+                      // );
                     }
                   },
                   color: isDarkMode ? Color(0xFF313131) : Color(0xFFD0D0D0),

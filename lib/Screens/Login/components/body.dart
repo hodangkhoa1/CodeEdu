@@ -1,17 +1,16 @@
 import 'dart:async';
 
-import 'package:code_edu/AllWidgets/display_toast_message.dart';
-import 'package:code_edu/AllWidgets/show_dialog_error.dart';
 import 'package:code_edu/Screens/Login/components/background.dart';
-import 'package:code_edu/Screens/Login/components/build_email_form_field.dart';
-import 'package:code_edu/Screens/Login/components/build_form_field_password.dart';
 import 'package:code_edu/Screens/Login/function/login_user.dart';
 import 'package:code_edu/Screens/Signup/signup_screen.dart';
 import 'package:code_edu/Screens/forgot_password/forgot_password_screen.dart';
 import 'package:code_edu/components/already_have_an_account_check.dart';
+import 'package:code_edu/components/build_form_field_custom.dart';
 import 'package:code_edu/components/check_error.dart';
+import 'package:code_edu/components/display_toast_message.dart';
 import 'package:code_edu/components/form_error.dart';
 import 'package:code_edu/components/rounded_button.dart';
+import 'package:code_edu/components/show_dialog_error.dart';
 import 'package:code_edu/components/social_card.dart';
 import 'package:code_edu/functions/login_facebook.dart';
 import 'package:code_edu/functions/login_google.dart';
@@ -44,7 +43,6 @@ class _LoginFormState extends State<Body> with TickerProviderStateMixin {
   bool _activeShowPass = false;
   final List<String> emailErrors = [];
   final List<String> passwordErrors = [];
-  bool remember = false;
   final Future<FirebaseApp> _initialization = Firebase.initializeApp();
   TextEditingController emailTextEditingController = TextEditingController();
   TextEditingController passwordTextEditingController = TextEditingController();
@@ -52,6 +50,8 @@ class _LoginFormState extends State<Body> with TickerProviderStateMixin {
   bool isoffline = false;
   AnimationController _loginController;
   StreamSubscription<User> loginStateSubscription;
+  FocusNode emailFieldFocusNode;
+  FocusNode passwordFieldFocusNode;
 
   @override
   void initState() {
@@ -74,6 +74,30 @@ class _LoginFormState extends State<Body> with TickerProviderStateMixin {
       vsync: this,
     );
     super.initState();
+    emailFieldFocusNode = FocusNode();
+    passwordFieldFocusNode = FocusNode();
+    emailFieldFocusNode.addListener(() {
+      if (!emailFieldFocusNode.hasFocus) {
+        if(emailTextEditingController.text.trim().isEmpty && !(AppLocalizations.of(context).language == "English" ? emailErrors.contains(emailNullError) : emailErrors.contains(AppLocalizations.of(context).pleaseEnterYourEmail)) && !(AppLocalizations.of(context).language == "English" ? emailErrors.contains(invalidEmailError) : emailErrors.contains(AppLocalizations.of(context).pleaseEnterValidEmail))) {
+          setState(() {
+            AppLocalizations.of(context).language == "English" ? emailErrors.add(emailNullError) : emailErrors.add(AppLocalizations.of(context).pleaseEnterYourEmail);
+          });
+        } else if(!emailValidatorRegExp.hasMatch(emailTextEditingController.text.trim()) && !(AppLocalizations.of(context).language == "English" ? emailErrors.contains(invalidEmailError) : emailErrors.contains(AppLocalizations.of(context).pleaseEnterValidEmail)) && !(AppLocalizations.of(context).language == "English" ? emailErrors.contains(emailNullError) : emailErrors.contains(AppLocalizations.of(context).pleaseEnterYourEmail))){
+          setState(() {
+            AppLocalizations.of(context).language == "English" ? emailErrors.add(invalidEmailError) : emailErrors.add(AppLocalizations.of(context).pleaseEnterValidEmail);
+          });
+        }
+      }
+    });
+    passwordFieldFocusNode.addListener(() {
+      if (!passwordFieldFocusNode.hasFocus) {
+        if(passwordTextEditingController.text.trim().isEmpty && !(AppLocalizations.of(context).language == "English" ? passwordErrors.contains(passwordNullError) : passwordErrors.contains(AppLocalizations.of(context).pleaseEnterYourPassword))) {
+          setState(() {
+            AppLocalizations.of(context).language == "English" ? passwordErrors.add(passwordNullError) : passwordErrors.add(AppLocalizations.of(context).pleaseEnterYourPassword);
+          });
+        }
+      }
+    });
   }
 
   @override
@@ -81,6 +105,12 @@ class _LoginFormState extends State<Body> with TickerProviderStateMixin {
     internetconnection.cancel();
     _loginController.dispose();
     super.dispose();
+    emailFieldFocusNode.addListener(() {
+      super.dispose();
+    });
+    passwordFieldFocusNode.addListener(() {
+      super.dispose();
+    });
   }
 
   @override
@@ -150,52 +180,80 @@ class _LoginFormState extends State<Body> with TickerProviderStateMixin {
                           },
                         ),
                         SizedBox(height: size.height * 0.02),
-                        buildEmailFormField(
-                          context,
-                          AppLocalizations.of(context).language,
+                        buildFormFieldCustom(
                           emailErrors,
-                          emailNullError,
-                          AppLocalizations.of(context).pleaseEnterYourEmail,
+                          emailFieldFocusNode,
+                          1,
+                          1,
                           emailTextEditingController,
+                          BorderRadius.circular(29),
+                          (AppLocalizations.of(context).language == "English" ? (emailErrors.contains(invalidEmailError) || emailErrors.contains(emailNullError)) : (emailErrors.contains(AppLocalizations.of(context).pleaseEnterValidEmail) || emailErrors.contains(AppLocalizations.of(context).pleaseEnterYourEmail))) ? Colors.red : Colors.green,
+                          TextInputType.emailAddress,
+                          false,
                           email,
                           (value) {
-                            if (value.isNotEmpty && (AppLocalizations.of(context).language == "English" ? emailErrors.contains(emailNullError) : emailErrors.contains(AppLocalizations.of(context).pleaseEnterYourEmail))) {
+                            if(value.isNotEmpty && (AppLocalizations.of(context).language == "English" ? emailErrors.contains(emailNullError) : emailErrors.contains(AppLocalizations.of(context).pleaseEnterYourEmail)) && !(AppLocalizations.of(context).language == "English" ? emailErrors.contains(invalidEmailError) : emailErrors.contains(AppLocalizations.of(context).pleaseEnterValidEmail))) {
                               setState(() {
                                 AppLocalizations.of(context).language == "English" ? emailErrors.remove(emailNullError) : emailErrors.remove(AppLocalizations.of(context).pleaseEnterYourEmail);
                               });
+                            } else if(emailValidatorRegExp.hasMatch(value) && (AppLocalizations.of(context).language == "English" ? emailErrors.contains(invalidEmailError) : emailErrors.contains(AppLocalizations.of(context).pleaseEnterValidEmail)) && !(AppLocalizations.of(context).language == "English" ? emailErrors.contains(emailNullError) : emailErrors.contains(AppLocalizations.of(context).pleaseEnterYourEmail))){
+                              setState(() {
+                                AppLocalizations.of(context).language == "English" ? emailErrors.remove(invalidEmailError) : emailErrors.remove(AppLocalizations.of(context).pleaseEnterValidEmail);
+                              });
                             }
+                            email = value;
                             return null;
                           },
                           (value) {
-                            if (value.isEmpty && !(AppLocalizations.of(context).language == "English" ? emailErrors.contains(emailNullError) : emailErrors.contains(AppLocalizations.of(context).pleaseEnterYourEmail))) {
+                            if(value.isEmpty && !(AppLocalizations.of(context).language == "English" ? emailErrors.contains(emailNullError) : emailErrors.contains(AppLocalizations.of(context).pleaseEnterYourEmail)) && !(AppLocalizations.of(context).language == "English" ? emailErrors.contains(invalidEmailError) : emailErrors.contains(AppLocalizations.of(context).pleaseEnterValidEmail))) {
                               setState(() {
                                 AppLocalizations.of(context).language == "English" ? emailErrors.add(emailNullError) : emailErrors.add(AppLocalizations.of(context).pleaseEnterYourEmail);
+                              });
+                            } else if(!emailValidatorRegExp.hasMatch(value) && !(AppLocalizations.of(context).language == "English" ? emailErrors.contains(invalidEmailError) : emailErrors.contains(AppLocalizations.of(context).pleaseEnterValidEmail)) && !(AppLocalizations.of(context).language == "English" ? emailErrors.contains(emailNullError) : emailErrors.contains(AppLocalizations.of(context).pleaseEnterYourEmail))){
+                              setState(() {
+                                AppLocalizations.of(context).language == "English" ? emailErrors.add(invalidEmailError) : emailErrors.add(AppLocalizations.of(context).pleaseEnterValidEmail);
                               });
                             }
                             return null;
                           },
-                          AppLocalizations.of(context).yourEmail
+                          AppLocalizations.of(context).yourEmail,
+                          Icons.email_outlined,
+                          (AppLocalizations.of(context).language == "English" ? (emailErrors.contains(invalidEmailError) || emailErrors.contains(emailNullError)) : (emailErrors.contains(AppLocalizations.of(context).pleaseEnterValidEmail) || emailErrors.contains(AppLocalizations.of(context).pleaseEnterYourEmail))) ? Colors.red : Colors.green,
+                          (emailTextEditingController.text.trim().isNotEmpty || emailErrors.isNotEmpty)
+                          ? ((AppLocalizations.of(context).language == "English" ? (emailErrors.contains(invalidEmailError) || emailErrors.contains(emailNullError)) : (emailErrors.contains(AppLocalizations.of(context).pleaseEnterValidEmail) || emailErrors.contains(AppLocalizations.of(context).pleaseEnterYourEmail))) ? Icon(
+                            Icons.error_outline,
+                            size: 26,
+                            color: Colors.red,
+                          ) : Icon(
+                            Icons.check,
+                            size: 26,
+                            color: Colors.green,
+                          ))
+                          : null,
                         ),
                         FormError(errors: emailErrors),
-                        buildPasswordFormField(
-                          context,
-                          AppLocalizations.of(context).language,
+                        buildFormFieldCustom(
                           passwordErrors,
-                          passwordNullError,
-                          AppLocalizations.of(context).pleaseEnterYourPassword,
+                          passwordFieldFocusNode,
+                          1,
+                          1,
                           passwordTextEditingController,
+                          BorderRadius.circular(29),
+                          (AppLocalizations.of(context).language == "English" ? passwordErrors.contains(passwordNullError) : passwordErrors.contains(AppLocalizations.of(context).pleaseEnterYourPassword)) ? Colors.red : Colors.green,
+                          TextInputType.visiblePassword,
                           !_activeShowPass,
                           password,
                           (value) {
-                            if(value.isNotEmpty && (AppLocalizations.of(context).language == "English" ? passwordErrors.contains(passwordNullError) : passwordErrors.contains(AppLocalizations.of(context).pleaseEnterYourPassword))){
+                            if(value.isNotEmpty && (AppLocalizations.of(context).language == "English" ? passwordErrors.contains(passwordNullError) : passwordErrors.contains(AppLocalizations.of(context).pleaseEnterYourPassword))) {
                               setState(() {
                                 AppLocalizations.of(context).language == "English" ? passwordErrors.remove(passwordNullError) : passwordErrors.remove(AppLocalizations.of(context).pleaseEnterYourPassword);
                               });
                             }
+                            password = value;
                             return null;
                           },
                           (value) {
-                            if(value.isEmpty && !(AppLocalizations.of(context).language == "English" ? passwordErrors.contains(passwordNullError) : passwordErrors.contains(AppLocalizations.of(context).pleaseEnterYourPassword))){
+                            if(value.isEmpty && !(AppLocalizations.of(context).language == "English" ? passwordErrors.contains(passwordNullError) : passwordErrors.contains(AppLocalizations.of(context).pleaseEnterYourPassword))) {
                               setState(() {
                                 AppLocalizations.of(context).language == "English" ? passwordErrors.add(passwordNullError) : passwordErrors.add(AppLocalizations.of(context).pleaseEnterYourPassword);
                               });
@@ -203,23 +261,40 @@ class _LoginFormState extends State<Body> with TickerProviderStateMixin {
                             return null;
                           },
                           AppLocalizations.of(context).yourPassword,
-                          onToggleShowPass,
-                          _activeShowPass
+                          Icons.lock,
+                          (AppLocalizations.of(context).language == "English" ? passwordErrors.contains(passwordNullError) : passwordErrors.contains(AppLocalizations.of(context).pleaseEnterYourPassword)) ? Colors.red : Colors.green,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              GestureDetector(
+                                onTap: onToggleShowPass,
+                                child: Icon(
+                                  _activeShowPass ? Icons.visibility : Icons.visibility_off,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              SizedBox(width: 6),
+                              (passwordTextEditingController.text.trim().isNotEmpty || passwordErrors.isNotEmpty)
+                              ? ((AppLocalizations.of(context).language == "English" ? passwordErrors.contains(passwordNullError) : passwordErrors.contains(AppLocalizations.of(context).pleaseEnterYourPassword)) ? Icon(
+                                Icons.error_outline,
+                                size: 26,
+                                color: Colors.red,
+                              ) : Icon(
+                                Icons.check,
+                                size: 26,
+                                color: Colors.green,
+                              )) : Icon(
+                                Icons.check,
+                                color: Colors.transparent,
+                              ),
+                            ],
+                          )
                         ),
                         FormError(errors: passwordErrors),
                         SizedBox(height: size.height * 0.01),
                         Row(
                           children: [
-                            // Checkbox(
-                            //   value: remember,
-                            //   onChanged: (value) {
-                            //     setState(() async {
-                            //       remember = value;
-                            //     });
-                            //   },
-                            //   activeColor: Colors.blue,
-                            // ),
-                            // Text("Remember me"),
                             Spacer(),
                             GestureDetector(
                               onTap: () {
@@ -229,8 +304,7 @@ class _LoginFormState extends State<Body> with TickerProviderStateMixin {
                               },
                               child: Text(
                                 "Forgot Password",
-                                style:
-                                    TextStyle(decoration: TextDecoration.underline),
+                                style: TextStyle(decoration: TextDecoration.underline),
                               ),
                             ),
                           ],
@@ -239,7 +313,6 @@ class _LoginFormState extends State<Body> with TickerProviderStateMixin {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            // ignore: deprecated_member_use
                             GestureDetector(
                               onTap: () async {
                                 //final isAuthenticated = await LocalAuthApi.fingerAuthenticate();
@@ -249,7 +322,12 @@ class _LoginFormState extends State<Body> with TickerProviderStateMixin {
                                     "Error",
                                     "This function is not currently supported by us. It will be updated soon",
                                     "Okay",
-                                    widget.isDarkMode
+                                    widget.isDarkMode,
+                                    "assets/images/8750-alert.json",
+                                    18,
+                                    () {
+                                      Navigator.of(context).pop();
+                                    }
                                   );
                                   // setState(() {
                                   //   if(userRef != null) {
@@ -291,7 +369,12 @@ class _LoginFormState extends State<Body> with TickerProviderStateMixin {
                                     AppLocalizations.of(context).errorSupportTitle,
                                     AppLocalizations.of(context).errorSupportMsg,
                                     "Okay",
-                                    widget.isDarkMode
+                                    widget.isDarkMode,
+                                    "assets/images/8750-alert.json",
+                                    18,
+                                    () {
+                                      Navigator.of(context).pop();
+                                    }
                                   );
                                   // setState(() {
                                   //   if(userRef != null) {
@@ -352,12 +435,26 @@ class _LoginFormState extends State<Body> with TickerProviderStateMixin {
                               press: (){
                                 if(isoffline == false) {
                                   setState(() {
-                                    loginFacebook(
+                                    showDialogError(
                                       context,
-                                      loginStateSubscription,
-                                      AppLocalizations.of(context).loginByFacebook
+                                      AppLocalizations.of(context).errorSupportTitle,
+                                      AppLocalizations.of(context).errorSupportMsg,
+                                      "Okay",
+                                      widget.isDarkMode,
+                                      "assets/images/8750-alert.json",
+                                      18,
+                                      () {
+                                        Navigator.of(context).pop();
+                                      }
                                     );
                                   });
+                                  // setState(() {
+                                  //   loginFacebook(
+                                  //     context,
+                                  //     loginStateSubscription,
+                                  //     AppLocalizations.of(context).loginByFacebook
+                                  //   );
+                                  // });
                                 } else {
                                   displayToastMessage(context, AppLocalizations.of(context).pleaseConnectToTheInternet);
                                 }
@@ -373,7 +470,12 @@ class _LoginFormState extends State<Body> with TickerProviderStateMixin {
                                       AppLocalizations.of(context).errorSupportTitle,
                                       AppLocalizations.of(context).errorSupportMsg,
                                       "Okay",
-                                      widget.isDarkMode
+                                      widget.isDarkMode,
+                                      "assets/images/8750-alert.json",
+                                      18,
+                                      () {
+                                        Navigator.of(context).pop();
+                                      }
                                     );
                                   });
                                 } else {
@@ -386,12 +488,26 @@ class _LoginFormState extends State<Body> with TickerProviderStateMixin {
                               press: (){
                                 if(isoffline == false) {
                                   setState(() {
-                                    loginGoogle(
+                                    showDialogError(
                                       context,
-                                      loginStateSubscription,
-                                      AppLocalizations.of(context).loginByGoogle
+                                      AppLocalizations.of(context).errorSupportTitle,
+                                      AppLocalizations.of(context).errorSupportMsg,
+                                      "Okay",
+                                      widget.isDarkMode,
+                                      "assets/images/8750-alert.json",
+                                      18,
+                                      () {
+                                        Navigator.of(context).pop();
+                                      }
                                     );
                                   });
+                                  // setState(() {
+                                  //   loginGoogle(
+                                  //     context,
+                                  //     loginStateSubscription,
+                                  //     AppLocalizations.of(context).loginByGoogle
+                                  //   );
+                                  // });
                                 } else {
                                   displayToastMessage(context, AppLocalizations.of(context).pleaseConnectToTheInternet);
                                 }
@@ -423,36 +539,6 @@ class _LoginFormState extends State<Body> with TickerProviderStateMixin {
       }
     );
   }
-
-  // void loginFacebook() {
-  //   var authBlocFacebook = Provider.of<AuthBlocFacebook>(context,listen: false);
-  //   authBlocFacebook.loginFacebook();
-  //   loginStateSubscription = authBlocFacebook.currentUser.listen((facebookUser) { 
-  //     if (facebookUser != null){
-  //       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen(
-  //         urlImage: facebookUser.photoURL,
-  //         nameTextAppBar: facebookUser.displayName,
-  //         emailGoogleLogin: facebookUser.email,
-  //       )), (Route<dynamic> route) => false);
-  //       displayToastMessage(context, "Bạn đăng nhập bằng facebook");
-  //     }
-  //   });
-  // }
-
-  // void loginGoogle() {
-  //   var authBlocGoogle = Provider.of<AuthGoogleBloc>(context, listen: false);
-  //   authBlocGoogle.loginGoogle();
-  //   loginStateSubscription = authBlocGoogle.currentUser.listen((googleUser) {
-  //     if (googleUser != null) {
-  //       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen(
-  //         urlImage: googleUser.photoURL,
-  //         nameTextAppBar: googleUser.displayName,
-  //         emailGoogleLogin: googleUser.email,
-  //       )), (Route<dynamic> route) => false);
-  //       displayToastMessage(context, "Bạn đăng nhập bằng google");
-  //     }
-  //   });
-  // }
   
   void onToggleShowPass(){
     setState(() {

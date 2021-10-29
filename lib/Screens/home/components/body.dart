@@ -2,14 +2,14 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:code_edu/AllWidgets/error_internet_msg.dart';
-import 'package:code_edu/AllWidgets/refresh_widget.dart';
 import 'package:code_edu/Screens/home/components/app_bar.dart';
 import 'package:code_edu/Screens/home/components/delayed_category_list.dart';
 import 'package:code_edu/Screens/home/components/delayed_swiper_image.dart';
 import 'package:code_edu/Screens/home/components/search_mic.dart';
 import 'package:code_edu/Screens/home/components/utils.dart';
 import 'package:code_edu/Screens/settings_screen/components/header_page.dart';
+import 'package:code_edu/components/error_internet_msg.dart';
+import 'package:code_edu/components/refresh_widget.dart';
 import 'package:code_edu/notifier/category_notifier.dart';
 import 'package:code_edu/requestAPI/category_api.dart';
 import 'package:code_edu/requestAPI/speech_api.dart';
@@ -25,6 +25,7 @@ class Body extends StatefulWidget {
   final String nameTextAppBar;
   final bool showBottomBar;
   final String uid;
+  final Function onTapAvatar;
 
   const Body({
     Key key,
@@ -32,6 +33,7 @@ class Body extends StatefulWidget {
     @required this.nameTextAppBar,
     @required this.showBottomBar,
     @required this.uid,
+    @required this.onTapAvatar
   }) : super(key: key);
 
   @override
@@ -120,6 +122,7 @@ class _BodyState extends State<Body> with SingleTickerProviderStateMixin{
           Column(
             children: [
               AppBarHomeCustom(
+                onTapAvatar: widget.onTapAvatar,
                 urlAvatar: widget.urlAvatar,
                 folded: _folded,
                 nameTextAppBar: widget.nameTextAppBar,

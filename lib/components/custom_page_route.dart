@@ -8,8 +8,8 @@ class CustomPageRoute extends PageRouteBuilder {
     @required this.direction,
     @required this.child,
   }) : super(
-    transitionDuration: Duration(milliseconds: 1000),
-    reverseTransitionDuration: Duration(milliseconds: 1000),
+    transitionDuration: Duration(milliseconds: 800),
+    reverseTransitionDuration: Duration(milliseconds: 800),
     pageBuilder: (context, animation, secondaryAnimation) => child,
   );
 

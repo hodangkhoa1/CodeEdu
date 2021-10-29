@@ -61,6 +61,9 @@ class _CategoryListState extends State<CategoryList> {
                           urlAvatar: widget.urlAvatar,
                           isDarkMode: widget.isDarkMode,
                           uid: widget.uid,
+                          titleCourse: widget.categoryNotifier.categoryList[index].fullNameCourses,
+                          authorCourse: widget.categoryNotifier.categoryList[index].author,
+                          startCourse: widget.categoryNotifier.categoryList[index].rating,
                         );
                       }));
                     });

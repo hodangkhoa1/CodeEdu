@@ -1,4 +1,7 @@
+import 'package:code_edu/Screens/settings_screen/components/header_page.dart';
+import 'package:code_edu/components/input_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({
@@ -10,6 +13,30 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
+  final isDarkMode = Settings.getValue<bool>(HeaderPage.keyDarkMode, true);
+  TextEditingController oldPasswordTextEditingController;
+  TextEditingController newPasswordTextEditingController;
+  TextEditingController retypePasswordTextEditingController;
+  final List<String> oldPasswordTextErrors = [];
+  final List<String> newPasswordTextErrors = [];
+  final List<String> retypePasswordTextErrors = [];
+
+  @override
+  void initState() {
+    oldPasswordTextEditingController = TextEditingController();
+    newPasswordTextEditingController = TextEditingController();
+    retypePasswordTextEditingController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    oldPasswordTextEditingController.dispose();
+    newPasswordTextEditingController.dispose();
+    retypePasswordTextEditingController.dispose();
+    super.dispose();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,40 +73,68 @@ class _ChangePasswordState extends State<ChangePassword> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextField(
-              decoration: InputDecoration(
-                hintText: "Old Password",
-                icon: Icon(
-                  Icons.lock,
-                  size: 30,
-                )
+            InputField(
+              title: "Old Password",
+              hint: "Please enter old password.",
+              isDarkMode: isDarkMode,
+              textEditingController: oldPasswordTextEditingController,
+              errors: oldPasswordTextErrors,
+              obscureText: false,
+              widget: Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: IconButton(
+                  onPressed: () {
+                    
+                  },
+                  icon: Icon(
+                    Icons.visibility,
+                    size: 25,
+                    color: Colors.grey,
+                  )
+                ),
               ),
-              keyboardType: TextInputType.visiblePassword,
-              obscureText: true,
             ),
-            SizedBox(height: 20),
-            TextField(
-              decoration: InputDecoration(
-                hintText: "New Password",
-                icon: Icon(
-                  Icons.lock,
-                  size: 30,
-                )
+            InputField(
+              title: "New Password",
+              hint: "Please enter new password.",
+              isDarkMode: isDarkMode,
+              textEditingController: newPasswordTextEditingController,
+              errors: newPasswordTextErrors,
+              obscureText: false,
+              widget: Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: IconButton(
+                  onPressed: () {
+                    
+                  },
+                  icon: Icon(
+                    Icons.visibility,
+                    size: 25,
+                    color: Colors.grey,
+                  )
+                ),
               ),
-              keyboardType: TextInputType.visiblePassword,
-              obscureText: true,
             ),
-            SizedBox(height: 20),
-            TextField(
-              decoration: InputDecoration(
-                hintText: "Retype Password",
-                icon: Icon(
-                  Icons.lock,
-                  size: 30,
-                )
+            InputField(
+              title: "Retype Password",
+              hint: "Please enter retype password.",
+              isDarkMode: isDarkMode,
+              textEditingController: retypePasswordTextEditingController,
+              errors: retypePasswordTextErrors,
+              obscureText: false,
+              widget: Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: IconButton(
+                  onPressed: () {
+                    
+                  },
+                  icon: Icon(
+                    Icons.visibility,
+                    size: 25,
+                    color: Colors.grey,
+                  )
+                ),
               ),
-              keyboardType: TextInputType.visiblePassword,
-              obscureText: true,
             ),
             SizedBox(height: 20),
             Align(

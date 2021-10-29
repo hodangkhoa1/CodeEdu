@@ -3,6 +3,7 @@ import 'package:code_edu/data/question_category.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:lottie/lottie.dart';
 
 class Body extends StatefulWidget {
   final String courseID;
@@ -16,10 +17,25 @@ class Body extends StatefulWidget {
   _BodyState createState() => _BodyState();
 }
 
-class _BodyState extends State<Body> {
+class _BodyState extends State<Body> with TickerProviderStateMixin {
   SwiperController _controller = SwiperController();
   final db = FirebaseFirestore.instance;
   List<QuestionCategory> _questionCategoryList = [];
+  AnimationController _notFoundController;
+
+  @override
+  void initState() {
+    _notFoundController = AnimationController(
+      vsync: this,
+    );
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _notFoundController.dispose();
+    super.dispose();
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -34,7 +50,7 @@ class _BodyState extends State<Body> {
               _questionCategoryList.add(questionCategory);
             });
             return Container(
-              child: Stack(
+              child: _questionCategoryList.isNotEmpty ? Stack(
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(bottom: 38),
@@ -159,6 +175,15 @@ class _BodyState extends State<Body> {
                     ),
                   )
                 ],
+              ) : Lottie.asset(
+                "assets/images/38061-search.json",
+                height: MediaQuery.of(context).size.height * 0.30,
+                controller: _notFoundController,
+                onLoaded: (animation) {
+                  _notFoundController..duration = animation.duration..repeat(
+                    reverse: true
+                  );
+                },
               ),
             );
           } else {

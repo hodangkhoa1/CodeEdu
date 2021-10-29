@@ -72,7 +72,7 @@ class _BodyState extends State<Body> {
                                   urlImage: categoryNotifier.categoryList[index].images,
                                   nameCourse: categoryNotifier.categoryList[index].fullNameCourses,
                                   numberRating: categoryNotifier.categoryList[index].rating,
-                                  numberView: categoryNotifier.categoryList[index].numberVisitors,
+                                  //numberView: categoryNotifier.categoryList[index].numberVisitors,
                                   urlAvatar: widget.urlImage,
                                 ),
                               );

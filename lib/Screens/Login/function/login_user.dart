@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:code_edu/AllWidgets/display_toast_message.dart';
-import 'package:code_edu/AllWidgets/progressDialog.dart';
 import 'package:code_edu/Screens/home/home_screen.dart';
+import 'package:code_edu/components/display_toast_message.dart';
+import 'package:code_edu/components/progressDialog.dart';
 import 'package:code_edu/data/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -33,14 +33,19 @@ void loginAndAuthenticateUser(BuildContext context, TextEditingController emailT
         snapshot.docs.forEach((snapValue) {
           if(snapValue != null) {
             OurUserDetail ourUserDetail = OurUserDetail.fromMap(snapValue.data());
-            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen(
-              urlImage: ourUserDetail.urlImage,
-              nameTextAppBar: ourUserDetail.fullName,
-              emailGoogleLogin: ourUserDetail.email,
-              showBottomBar: ourUserDetail.enroll,
-              uid: ourUserDetail.uid,
-            )), (Route<dynamic> route) => false);
-            displayToastMessage(context, AppLocalizations.of(context).loginByUserAccount);
+            if(ourUserDetail.uid == firebaseUsers.uid) {
+              Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => HomeScreen(
+                urlImage: ourUserDetail.urlImage,
+                nameUser: ourUserDetail.fullName,
+                emailUser: ourUserDetail.email,
+                nameUniversity: ourUserDetail.nameUniversity,
+                phoneNumber: ourUserDetail.phoneNumber,
+                showBottomBar: ourUserDetail.enroll,
+                uid: ourUserDetail.uid,
+                dateOfBirth: ourUserDetail.dateOfBirth.toDate(),
+              )), (Route<dynamic> route) => false);
+              displayToastMessage(context, AppLocalizations.of(context).loginByUserAccount);
+            }
           } else {
             Navigator.pop(context);
             _firebaseAuth.signOut();

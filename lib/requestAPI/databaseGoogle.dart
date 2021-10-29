@@ -14,6 +14,7 @@ class DatabaseGoogle {
         'fullName': google.fullName,
         'phoneNumber': google.phoneNumber,
         'urlImage': google.urlImage,
+        'nameUniversity': google.nameUniversity,
         'enroll': google.enroll,
         'accountCreated': Timestamp.now(),
       });

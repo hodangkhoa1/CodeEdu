@@ -12,6 +12,7 @@ class AppBarHomeCustom extends StatefulWidget {
   final TextEditingController textEditingController;
   final Function onTapTextField;
   final Function onPressed;
+  final Function onTapAvatar;
 
   const AppBarHomeCustom({
     Key key,
@@ -25,6 +26,7 @@ class AppBarHomeCustom extends StatefulWidget {
     @required this.textEditingController,
     @required this.onTapTextField,
     @required this.onPressed,
+    @required this.onTapAvatar,
   }) : super(key: key);
 
   @override
@@ -50,19 +52,22 @@ class _AppBarHomeCustomState extends State<AppBarHomeCustom> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Builder(
-                builder: (context) => Padding(
-                  padding: EdgeInsets.only(
-                    bottom: 3,
-                    left: 1
-                  ),
-                  child: CircleAvatar(
-                    radius: 22,
-                    child: ClipOval(
-                      child: Image.network(
-                        widget.urlAvatar != null ? widget.urlAvatar : "https://firebasestorage.googleapis.com/v0/b/codeeduapp.appspot.com/o/21-avatar-outline.gif?alt=media&token=7b98a6a0-15c8-4fd0-9d78-2ed2d468112a",
-                        fit: BoxFit.contain,
-                      )
+              GestureDetector(
+                onTap: widget.onTapAvatar,
+                child: Builder(
+                  builder: (context) => Padding(
+                    padding: EdgeInsets.only(
+                      bottom: 3,
+                      left: 1
+                    ),
+                    child: CircleAvatar(
+                      radius: 22,
+                      child: ClipOval(
+                        child: Image.network(
+                          widget.urlAvatar != null ? widget.urlAvatar : "https://firebasestorage.googleapis.com/v0/b/codeeduapp.appspot.com/o/21-avatar-outline.gif?alt=media&token=7b98a6a0-15c8-4fd0-9d78-2ed2d468112a",
+                          fit: BoxFit.contain,
+                        )
+                      ),
                     ),
                   ),
                 ),

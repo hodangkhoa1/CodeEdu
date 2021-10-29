@@ -1,4 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="educode.com.code_edu_app">
 
     <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
@@ -6,6 +7,7 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
    <application
+        tools:replace="android:label"
         android:label="Code Edu"
         android:icon="@mipmap/launcher_icon">
         <activity

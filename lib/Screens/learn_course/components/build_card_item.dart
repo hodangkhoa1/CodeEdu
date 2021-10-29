@@ -7,7 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class BuildCardItem extends StatelessWidget {
   final String urlImage;
   final String nameCourse;
-  final int numberView;
+  //final int numberView;
   final double numberRating;
   final String urlAvatar;
 
@@ -15,7 +15,7 @@ class BuildCardItem extends StatelessWidget {
     Key key,
     @required this.urlImage,
     @required this.nameCourse,
-    @required this.numberView,
+    //@required this.numberView,
     @required this.numberRating,
     @required this.urlAvatar
   }) : super(key: key);
@@ -98,12 +98,12 @@ class BuildCardItem extends StatelessWidget {
                               color: isDarkMode ? Colors.blue : Colors.black,
                             ),
                             SizedBox(width: 5),
-                            Text(
-                              "${numberView} views",
-                              style: TextStyle(
-                                fontSize: 13
-                              ),
-                            ),
+                            // Text(
+                            //   "${numberView} views",
+                            //   style: TextStyle(
+                            //     fontSize: 13
+                            //   ),
+                            // ),
                           ],
                         ),
                         SizedBox(height: 5),

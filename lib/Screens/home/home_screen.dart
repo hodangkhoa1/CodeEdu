@@ -1,6 +1,6 @@
-import 'package:code_edu/Screens/code_app/code_app_screen.dart';
 import 'package:code_edu/Screens/home/components/bottom_navigation_bar.dart';
 import 'package:code_edu/Screens/learn_course/learn_course.dart';
+import 'package:code_edu/Screens/note_page/note_screen.dart';
 import 'package:code_edu/Screens/quiz_app/quiz_app_screen.dart';
 import 'package:code_edu/Screens/settings_screen/components/header_page.dart';
 import 'package:code_edu/Screens/side_bar/side_bar.dart';
@@ -10,18 +10,24 @@ import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
 class HomeScreen extends StatefulWidget {
   final String urlImage;
-  final String nameTextAppBar;
-  final String emailGoogleLogin;
+  final String nameUser;
+  final String nameUniversity;
+  final String emailUser;
+  final String phoneNumber;
   final bool showBottomBar;
   final String uid;
+  final DateTime dateOfBirth;
 
   const HomeScreen({
     Key key,
     @required this.urlImage,
-    @required this.nameTextAppBar,
-    @required this.emailGoogleLogin,
+    @required this.nameUser,
+    @required this.nameUniversity,
+    @required this.emailUser,
+    @required this.phoneNumber,
     @required this.showBottomBar,
-    @required this.uid
+    @required this.uid,
+    @required this.dateOfBirth
   }) : super(key: key);
 
   @override
@@ -30,31 +36,45 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final isDarkMode = Settings.getValue<bool>(HeaderPage.keyDarkMode, true);
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   int _index = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       drawer: SideBar(
         urlImage: widget.urlImage,
-        nameGoogleLogin: (widget.nameTextAppBar != null) ? widget.nameTextAppBar : "Anonymous",
-        emailGoogleLogin: (widget.emailGoogleLogin != null) ? widget.emailGoogleLogin : "",
+        nameUser: widget.nameUser != null ? widget.nameUser : "Anonymous",
+        nameUniversity: widget.nameUniversity,
+        emailUser: widget.emailUser,
+        phoneNumber: widget.phoneNumber,
+        uid: widget.uid,
+        dateOfBirth: widget.dateOfBirth,
       ),
       body: Body(
+        onTapAvatar: () => _scaffoldKey.currentState.openDrawer(),
         urlAvatar: widget.urlImage,
-        nameTextAppBar: widget.nameTextAppBar,
+        nameTextAppBar: widget.nameUser,
         showBottomBar: widget.showBottomBar,
         uid: widget.uid,
       ),
       bottomNavigationBar: Stack(
         children: [
           _index == 0 ? Body(
+            onTapAvatar: () => _scaffoldKey.currentState.openDrawer(),
             urlAvatar: widget.urlImage,
-            nameTextAppBar: widget.nameTextAppBar,
+            nameTextAppBar: widget.nameUser,
             showBottomBar: widget.showBottomBar,
             uid: widget.uid,
           ) : (_index == 1 ? CodeAppScreen(
             urlImage: widget.urlImage,
+            emailUser: widget.emailUser,
+            nameUniversity: widget.nameUniversity,
+            nameUser: widget.nameUser != null ? widget.nameUser : "Anonymous",
+            phoneNumber: widget.phoneNumber,
+            uid: widget.uid,
+            dateOfBirth: widget.dateOfBirth,
           ) : _index == 2 ? QuizApp(
             urlImage: widget.urlImage,
           ) : LearnCourse(

@@ -5,12 +5,14 @@ class SettingScreen extends StatefulWidget {
   final String urlImage;
   final String name;
   final String email;
+  final String uid;
 
   const SettingScreen({
     Key key,
     @required this.urlImage,
     @required this.name,
     @required this.email,
+    @required this.uid
   }) : super(key: key);
 
   @override
@@ -53,6 +55,7 @@ class _SettingScreenState extends State<SettingScreen> {
         urlImage: widget.urlImage,
         name: widget.name,
         email: widget.email,
+        uid: widget.uid,
       ),
     );
   }

@@ -14,6 +14,7 @@ class DatabaseFacebook {
         'fullName': facebook.fullName,
         'phoneNumber': facebook.phoneNumber,
         'urlImage': facebook.urlImage,
+        'nameUniversity': facebook.nameUniversity,
         'enroll': facebook.enroll,
         'accountCreated': Timestamp.now(),
       });

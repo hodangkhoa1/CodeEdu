@@ -38,9 +38,8 @@ class _BodyState extends State<Body> with TickerProviderStateMixin{
     return Center(
       child: Column(
         children: <Widget>[
-          //SizedBox(height: size.height * 0.04),
-          Lottie.network(
-            "https://assets5.lottiefiles.com/packages/lf20_Vwcw5D.json",
+          Lottie.asset(
+            "assets/images/10470-confirm.json",
             height: size.height * 0.4,
             controller: _successfulController,
             onLoaded: (animation) {

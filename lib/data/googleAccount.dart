@@ -6,6 +6,7 @@ class OurGoogle {
   String fullName;
   String phoneNumber;
   String urlImage;
+  String nameUniversity;
   bool enroll;
   Timestamp accountCreated;
 
@@ -15,6 +16,7 @@ class OurGoogle {
     this.fullName,
     this.phoneNumber,
     this.urlImage,
+    this.nameUniversity,
     this.enroll,
     this.accountCreated
   });
@@ -26,7 +28,9 @@ class OurGoogleDetail {
   String fullName;
   String phoneNumber;
   String urlImage;
+  String nameUniversity;
   bool enroll;
+  Timestamp dateOfBirth;
 
   OurGoogleDetail.fromMap(Map<String, dynamic> data) {
     uid = data['uid'];
@@ -34,6 +38,8 @@ class OurGoogleDetail {
     fullName = data['fullName'];
     phoneNumber = data['phoneNumber'];
     urlImage = data['urlImage'];
+    nameUniversity = data['nameUniversity'];
     enroll = data['enroll'];
+    dateOfBirth = data['dateOfBirth'];
   }
 }

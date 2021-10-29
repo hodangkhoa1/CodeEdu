@@ -1,5 +1,5 @@
-import 'package:code_edu/AllWidgets/language_picker_widget.dart';
 import 'package:code_edu/Screens/settings_screen/components/icon_widget.dart';
+import 'package:code_edu/components/language_picker_widget.dart';
 import 'package:code_edu/validators/reg_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';

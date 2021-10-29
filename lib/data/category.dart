@@ -26,8 +26,8 @@ class Category {
   double rating;
   int numCourses;
   String fullNameCourses;
-  int numberVisitors;
   String courseID;
+  String author;
 
   Category.fromMap(Map<String, dynamic> data) {
     courseID = data['courseID'];
@@ -36,7 +36,7 @@ class Category {
     rating = data['rating'];
     numCourses = data['numCourses'];
     fullNameCourses = data['fullNameCourse'];
-    numberVisitors = data['NumberVisitors'];
+    author = data['author'];
   }
 }
 
@@ -48,6 +48,7 @@ class CoursesDetail {
   String title;
   String urlVideo;
   String urlPDF;
+  String urlImage;
 
   CoursesDetail.fromMap(Map<String, dynamic> data) {
     hours = data['hours'];
@@ -57,5 +58,6 @@ class CoursesDetail {
     title = data['title'];
     urlVideo = data['urlVideo'];
     urlPDF = data['urlPDF'];
+    urlImage = data['urlImage'];
   }
 }

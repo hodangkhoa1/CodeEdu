@@ -14,8 +14,10 @@ class OurDatabase {
         'fullName': user.fullName,
         'phoneNumber': user.phoneNumber,
         'urlImage': user.urlImage,
+        'nameUniversity': user.nameUniversity,
         'enroll': user.enroll,
         'accountCreated': Timestamp.now(),
+        'dateOfBirth': Timestamp.now(),
       });
     } catch (e) {
       print(e);
